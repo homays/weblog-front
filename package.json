@@ -12,7 +12,7 @@
     "@element-plus/icons-vue": "^2.3.1",
     "animate.css": "^4.1.1",
     "axios": "^1.6.5",
-    "element-plus": "^2.5.2",
+    "element-plus": "^2.3.9",
     "flowbite": "^2.2.1",
     "vue": "^3.3.11",
     "vue-router": "^4.2.5"
