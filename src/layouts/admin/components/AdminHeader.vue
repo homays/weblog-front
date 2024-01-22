@@ -1,15 +1,16 @@
 <template>
+    <!-- 设置背景色为白色、高度为 64px，padding-right 为 4， border-bottom 为 slate 100 -->
     <div class="bg-white h-[64px] flex pr-4 border-b border-slate-100">
         <!-- 左边栏收缩、展开 -->
         <div class="w-[42px] h-[64px] cursor-pointer flex items-center justify-center text-gray-700 hover:bg-gray-200"
             @click="handleMenuWidth">
             <el-icon>
-                <Fold v-if="menuStore.menuWidth == '250px'"/>
+                <Fold v-if="menuStore.menuWidth == '250px'" />
                 <Expand v-else />
             </el-icon>
         </div>
 
-        <!-- 右边容器，通过 ml-auto 让其在父容器的右边 -->
+        <!-- 右边容器 -->
         <div class="ml-auto flex">
             <!-- 点击刷新页面 -->
             <el-tooltip class="box-item" effect="dark" content="刷新" placement="bottom">
@@ -20,12 +21,14 @@
                     </el-icon>
                 </div>
             </el-tooltip>
+
             <!-- 点击全屏展示 -->
             <el-tooltip class="box-item" effect="dark" content="全屏" placement="bottom">
-                <div class="w-[42px] h-[64px] cursor-pointer flex items-center justify-center text-gray-700 mr-2 hover:bg-gray-200" @click="toggle">
+                <div class="w-[42px] h-[64px] cursor-pointer flex items-center justify-center text-gray-700 mr-2 hover:bg-gray-200"
+                    @click="toggle">
                     <el-icon>
-                        <FullScreen v-if="!isFullscreen"/>
-                        <Aim v-else/>
+                        <FullScreen v-if="!isFullscreen" />
+                        <Aim v-else />
                     </el-icon>
                 </div>
             </el-tooltip>
@@ -34,7 +37,7 @@
             <el-dropdown class="flex items-center justify-center">
                 <span class="el-dropdown-link flex items-center justify-center text-gray-700 text-xs">
                     <!-- 头像 Avatar -->
-                    <el-avatar :size="25"
+                    <el-avatar class="mr-2" :size="25"
                         src="https://img.quanxiaoha.com/quanxiaoha/f97361c0429d4bb1bc276ab835843065.jpg" />
                     Admin
                     <el-icon class="el-icon--right">
@@ -50,20 +53,26 @@
             </el-dropdown>
         </div>
     </div>
+    
 </template>
+
 <script setup>
-import { useMenuStore } from "@/stores/menu";
-// 引入 useFullscreen
+import { useMenuStore } from '@/stores/menu'
 import { useFullscreen } from '@vueuse/core'
 
-const menuStore = useMenuStore()
 // isFullscreen 表示当前是否处于全屏；toggle 用于动态切换全屏、非全屏
 const { isFullscreen, toggle } = useFullscreen()
 
+// 引入了菜单
+const menuStore = useMenuStore()
+
+// icon 点击事件
 const handleMenuWidth = () => {
     menuStore.handleMenuWidth()
 }
 
 // 刷新页面
 const handleRefresh = () => location.reload()
+    
+
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-slate-800 h-screen text-white menu-container transition-all" :style="{ width: menuStore.menuWidth }">
+    <div class="bg-slate-800 h-screen text-white menu-container transition-all duration-300" :style="{ width: menuStore.menuWidth }">
         <!-- 顶部 Logo, 指定高度为 64px, 和右边的 Header 头保持一样高 -->
         <div class="flex items-center justify-center h-[64px]">
             <img v-if="menuStore.menuWidth == '250px'" src="@/assets/weblog-logo.png" class="h-[60px]">
@@ -18,12 +18,28 @@
                 </el-menu-item>
             </template>
         </el-menu>
-    </div>
-</template>
+</div></template>
+
 <script setup>
 import { ref, computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useMenuStore } from '@/stores/menu'
+
+const menuStore = useMenuStore()
+
+const route = useRoute()
+const router = useRouter()
+
+// 是否折叠
+const isCollapse = computed(() =>  !(menuStore.menuWidth == '250px'))
+
+// 根据路由地址判断哪个菜单被选中
+const defaultActive = ref(route.path)
+
+// 菜单选择事件
+const handleSelect = (path) => {
+    router.push(path)
+}
 
 const menus = [
     {
@@ -52,23 +68,8 @@ const menus = [
         'path': '/admin/blog/setting',
     },
 ]
-
-const route = useRoute()
-const router = useRouter()
-// 根据路由地址判断哪个菜单被选中
-const defaultActive = ref(route.path)
-// 引入 useMenuStore
-const menuStore = useMenuStore()
-
-// 菜单选择事件
-const handleSelect = (path) => {
-    router.push(path)
-}
-
-// 是否折叠
-const isCollapse = computed(() => !(menuStore.menuWidth == '250px'))
-
 </script>
+
 <style>
 .el-menu {
     background-color: rgb(30 41 59 / 1);
@@ -83,12 +84,19 @@ const isCollapse = computed(() => !(menuStore.menuWidth == '250px'))
     background-color: #ffffff10;
 }
 
+
 .el-menu-item.is-active {
-    background-color: var(--el-color-primary);
+    background-color: #409eff10;
     color: #fff;
 }
 
-.el-menu-item.is-active:hover {
+.el-menu-item.is-active:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 100%;
     background-color: var(--el-color-primary);
 }
 
@@ -99,4 +107,5 @@ const isCollapse = computed(() => !(menuStore.menuWidth == '250px'))
 .el-menu-item:hover {
     background-color: #ffffff10;
 }
+
 </style>
