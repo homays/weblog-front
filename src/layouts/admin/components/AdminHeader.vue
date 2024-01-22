@@ -1,9 +1,11 @@
 <template>
     <div class="bg-white h-[64px] flex pr-4 border-b border-slate-200">
         <!-- 左边栏收缩、展开 -->
-        <div class="w-[42px] h-[64px] cursor-pointer flex items-center justify-center text-gray-700 hover:bg-gray-200">
+        <div class="w-[42px] h-[64px] cursor-pointer flex items-center justify-center text-gray-700 hover:bg-gray-200"
+            @click="handleMenuWidth">
             <el-icon>
-                <Fold />
+                <Fold v-if="menuStore.menuWidth == '250px'"/>
+                <Expand v-else />
             </el-icon>
         </div>
 
@@ -11,7 +13,8 @@
         <div class="ml-auto flex">
             <!-- 点击全屏展示 -->
             <el-tooltip class="box-item" effect="dark" content="全屏" placement="bottom">
-                <div class="w-[42px] h-[64px] cursor-pointer flex items-center justify-center text-gray-700 mr-2 hover:bg-gray-200">
+                <div
+                    class="w-[42px] h-[64px] cursor-pointer flex items-center justify-center text-gray-700 mr-2 hover:bg-gray-200">
                     <el-icon>
                         <FullScreen />
                     </el-icon>
@@ -39,3 +42,12 @@
         </div>
     </div>
 </template>
+<script setup>
+import { useMenuStore } from "@/stores/menu";
+
+const menuStore = useMenuStore()
+
+const handleMenuWidth = () => {
+    menuStore.handleMenuWidth()
+}
+</script>
