@@ -16,6 +16,7 @@
     "element-plus": "^2.3.9",
     "flowbite": "^2.2.1",
     "nprogress": "^0.2.0",
+    "pinia": "^2.1.7",
     "universal-cookie": "^7.0.1",
     "vue": "^3.3.11",
     "vue-router": "^4.2.5"
