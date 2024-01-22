@@ -47,5 +47,7 @@ const menuStore = useMenuStore()
 .el-header {
     padding: 0!important;
 }
-
+.el-footer {
+    padding: 0!important;
+}
 </style>
