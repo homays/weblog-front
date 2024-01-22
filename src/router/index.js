@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Index from '@/pages/frontend/index.vue'
 import Login from '@/pages/admin/login.vue'
 import AdminIndex from '@/pages/admin/index.vue'
+import Admin from '@/layouts/admin/admin.vue'
 
 // 统一在这里声明所有路由
 const routes = [
