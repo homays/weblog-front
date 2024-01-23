@@ -11,7 +11,7 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 // 导入全局路由守卫
 import '@/permission'
 // 引入全局状态管理 Pinia
-import { createPinia } from 'pinia'
+import pinia from '@/stores'
 
 const app = createApp(App)
 
@@ -20,7 +20,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
 
-const pinia = createPinia()
+
 
 // 应用路由
 app.use(router)
