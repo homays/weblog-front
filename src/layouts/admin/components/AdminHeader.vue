@@ -54,11 +54,10 @@
         </div>
 
         <!-- 修改密码 -->
-        <el-dialog v-model="dialogVisible" title="修改密码" width="40%" :draggable="true" :close-on-click-modal="false"
+        <!-- <el-dialog v-model="dialogVisible" title="修改密码" width="40%" :draggable="true" :close-on-click-modal="false"
             :close-on-press-escape="false">
             <el-form ref="formRef" :rules="rules" :model="form">
                 <el-form-item label="用户名" prop="username" label-width="120px">
-                    <!-- 输入框组件 -->
                     <el-input size="large" v-model="form.username" placeholder="请输入用户名" clearable disabled />
                 </el-form-item>
                 <el-form-item label="密码" prop="password" label-width="120px">
@@ -78,7 +77,22 @@
                     </el-button>
                 </span>
             </template>
-        </el-dialog>
+        </el-dialog> -->
+        <FormDialog ref="formDialogRef" title="修改密码" destroyOnClose @submit="onSubmit">
+            <el-form ref="formRef" :rules="rules" :model="form">
+                <el-form-item label="用户名" prop="username" label-width="120px">
+                    <el-input size="large" v-model="form.username" placeholder="请输入用户名" clearable disabled />
+                </el-form-item>
+                <el-form-item label="密码" prop="password" label-width="120px">
+                    <el-input size="large" type="password" v-model="form.password" placeholder="请输入密码" clearable
+                        show-password />
+                </el-form-item>
+                <el-form-item label="确认密码" prop="rePassword" label-width="120px">
+                    <el-input size="large" type="password" v-model="form.rePassword" placeholder="请确认密码" clearable
+                        show-password />
+                </el-form-item>
+            </el-form>
+        </FormDialog>
     </div>
 </template>
 
@@ -90,6 +104,7 @@ import { useRouter } from 'vue-router'
 import { showMessage, showModel } from '@/composables/util';
 import { ref, reactive, watch } from 'vue'
 import { updateAdminPassword } from '@/api/admin/user'
+import FormDialog from '@/components/FormDialog.vue'
 
 // 引入了用户 Store
 const userStore = useUserStore()
@@ -109,7 +124,7 @@ const handleMenuWidth = () => {
 // 刷新页面
 const handleRefresh = () => location.reload()
 // 对话框是否显示
-const dialogVisible = ref(false)
+const formDialogRef = ref(null)
 // 表单引用
 const formRef = ref(null)
 
@@ -128,7 +143,7 @@ const handleCommand = (command) => {
     // 更新密码
     if (command == 'updatePassword') {
         // 显示修改密码对话框
-        dialogVisible.value = true
+        formDialogRef.value.open()
     } else if (command == 'logout') { // 退出登录
         logout()
     }
@@ -167,7 +182,7 @@ const onSubmit = () => {
             if (res.success == true) {
                 showMessage('密码重置成功，请重新登录')
                 userStore.logout()
-                dialogVisible.value = false
+                formDialogRef.value.close()
                 router.push('/login')
             } else {
                 let message = res.message

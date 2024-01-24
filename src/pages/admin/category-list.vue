@@ -21,7 +21,7 @@
         <el-card shadow="never">
             <!-- 新增按钮 -->
             <div class="mb-5">
-                <el-button type="primary" @click="dialogVisible = true">
+                <el-button type="primary" @click="addCategoryBtnClick">
                     <el-icon class="mr-1">
                         <Plus />
                     </el-icon>新增
@@ -34,7 +34,7 @@
                 <el-table-column prop="createTime" label="创建时间" width="180" />
                 <el-table-column label="操作">
                     <template #default="scope">
-                        <el-button type="danger" size="small">
+                        <el-button type="danger" size="small" @click="deleteCategorySubmit(scope.row)">
                             <el-icon class="mr-1">
                                 <Delete />
                             </el-icon>删除
@@ -51,24 +51,29 @@
         </el-card>
 
         <!-- 添加分类 -->
-        <el-dialog v-model="dialogVisible" title="添加文章分类" width="40%" :draggable="true" :close-on-click-modal="false"
+        <!-- <el-dialog v-model="dialogVisible" title="添加文章分类" width="40%" :draggable="true" :close-on-click-modal="false"
             :close-on-press-escape="false">
             <el-form ref="formRef" :rules="rules" :model="form">
                 <el-form-item label="分类名称" prop="name" label-width="80px">
-                    <!-- 输入框组件 -->
-                    <el-input size="large" v-model="form.name" placeholder="请输入分类名称" maxlength="20" show-word-limit
-                        clearable />
+        <el-input size="large" v-model="form.name" placeholder="请输入分类名称" maxlength="20" show-word-limit clearable />
+        </el-form-item>
+        </el-form>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="cancel">取消</el-button>
+                <el-button type="primary" @click="onSubmit">
+                    提交
+                </el-button>
+            </span>
+        </template>
+        </el-dialog> -->
+        <FormDialog ref="formDialogRef" title="添加文章分类" destroyOnClose @submit="onSubmit">
+            <el-form ref="formRef" :rules="rules" :model="form">
+                <el-form-item label="分类名称" prop="name" label-width="80px" size="large">
+                    <el-input v-model="form.name" placeholder="请输入分类名称" maxlength="20" show-word-limit clearable />
                 </el-form-item>
             </el-form>
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button @click="cancel">取消</el-button>
-                    <el-button type="primary" @click="onSubmit">
-                        提交
-                    </el-button>
-                </span>
-            </template>
-        </el-dialog>
+        </FormDialog>
     </div>
 </template>
 <script setup>
@@ -76,8 +81,9 @@
 import { Search, RefreshRight } from '@element-plus/icons-vue'
 import { reactive, ref } from 'vue'
 import moment from 'moment'
-import { getCategoryPageList, addCategory  } from '@/api/admin/category'
-import { showMessage } from '@/composables/util'
+import { getCategoryPageList, addCategory, deleteCategory } from '@/api/admin/category'
+import { showMessage, showModel } from '@/composables/util'
+import FormDialog from '@/components/FormDialog.vue'
 
 // 分页查询的分类名称
 const searchCategoryName = ref('')
@@ -127,7 +133,8 @@ const size = ref(10)
 const startDate = reactive({})
 const endDate = reactive({})
 // 对话框是否显示
-const dialogVisible = ref(false)
+// const dialogVisible = ref(false)
+const formDialogRef = ref(null)
 // 表单引用
 const formRef = ref(null)
 // 添加文章分类表单对象
@@ -178,11 +185,11 @@ function getTableData() {
 }
 getTableData()
 
-// 新增取消
-const cancel = () => {
-    form.name = ''
-    dialogVisible.value = false
+// 新增分类按钮点击事件
+const addCategoryBtnClick = () => {
+    formDialogRef.value.open()
 }
+
 
 // 新增提交
 const onSubmit = () => {
@@ -195,7 +202,22 @@ const onSubmit = () => {
             if (res.success == true) {
                 showMessage('分类添加成功')
                 form.name = ''
-                dialogVisible.value = false
+                formDialogRef.value.close()
+                getTableData()
+            } else {
+                let message = res.message
+                showMessage(message, 'error')
+            }
+        })
+    })
+}
+
+// 删除分类
+const deleteCategorySubmit = (row) => {
+    showModel('是否确认删除该分类？').then(() => {
+        deleteCategory(row.id).then((res) => {
+            if (res.success == true) {
+                showMessage('删除成功')
                 getTableData()
             } else {
                 let message = res.message
