@@ -29,7 +29,7 @@
             </div>
 
             <!-- 分页列表 -->
-            <el-table :data="tableData" border stripe style="width: 100%">
+            <el-table :data="tableData" border stripe style="width: 100%" v-loading="tableLoading">
                 <el-table-column prop="name" label="分类名称" width="180" />
                 <el-table-column prop="createTime" label="创建时间" width="180" />
                 <el-table-column label="操作">
@@ -141,6 +141,8 @@ const formRef = ref(null)
 const form = reactive({
     name: ''
 })
+// 表格加载 Loading
+const tableLoading = ref(false)
 
 // 规则校验
 const rules = {
@@ -173,6 +175,8 @@ const reset = () => {
 }
 
 function getTableData() {
+    // 显示表格 loading
+    tableLoading.value = true
     getCategoryPageList({ current: current.value, size: size.value, startDate: startDate.value, endDate: endDate.value, name: searchCategoryName.value })
         .then((res) => {
             if (res.success = true) {
@@ -181,7 +185,7 @@ function getTableData() {
                 size.value = res.size
                 total.value = res.total
             }
-        })
+        }).finally(() => tableLoading.value = false) // 隐藏表格 loading
 }
 getTableData()
 
