@@ -21,7 +21,7 @@
         <el-card shadow="never">
             <!-- 新增按钮 -->
             <div class="mb-5">
-                <el-button type="primary">
+                <el-button type="primary" @click="dialogVisible = true">
                     <el-icon class="mr-1">
                         <Plus />
                     </el-icon>新增
@@ -45,10 +45,30 @@
             <!-- 分页 -->
             <div class="mt-10 flex justify-center">
                 <el-pagination v-model:current-page="current" v-model:page-size="size" :page-sizes="[10, 20, 50]"
-                :small="false" :background="true" layout="total, sizes, prev, pager, next, jumper"
-                :total="total" @size-change="handleSizeChange" @current-change="getTableData" />
+                    :small="false" :background="true" layout="total, sizes, prev, pager, next, jumper" :total="total"
+                    @size-change="handleSizeChange" @current-change="getTableData" />
             </div>
         </el-card>
+
+        <!-- 添加分类 -->
+        <el-dialog v-model="dialogVisible" title="添加文章分类" width="40%" :draggable="true" :close-on-click-modal="false"
+            :close-on-press-escape="false">
+            <el-form ref="formRef" :rules="rules" :model="form">
+                <el-form-item label="分类名称" prop="name" label-width="80px">
+                    <!-- 输入框组件 -->
+                    <el-input size="large" v-model="form.name" placeholder="请输入分类名称" maxlength="20" show-word-limit
+                        clearable />
+                </el-form-item>
+            </el-form>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="cancel">取消</el-button>
+                    <el-button type="primary" @click="onSubmit">
+                        提交
+                    </el-button>
+                </span>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup>
@@ -56,7 +76,8 @@
 import { Search, RefreshRight } from '@element-plus/icons-vue'
 import { reactive, ref } from 'vue'
 import moment from 'moment'
-import { getCategoryPageList } from '@/api/admin/category'
+import { getCategoryPageList, addCategory  } from '@/api/admin/category'
+import { showMessage } from '@/composables/util'
 
 // 分页查询的分类名称
 const searchCategoryName = ref('')
@@ -105,6 +126,22 @@ const size = ref(10)
 // 查询条件：开始结束时间
 const startDate = reactive({})
 const endDate = reactive({})
+// 对话框是否显示
+const dialogVisible = ref(false)
+// 表单引用
+const formRef = ref(null)
+// 添加文章分类表单对象
+const form = reactive({
+    name: ''
+})
+
+// 规则校验
+const rules = {
+    name: [
+        { required: true, message: '分类名称不能为空', trigger: 'blur' },
+        { min: 1, max: 20, message: '分类名称字数要求大于 1 个字符，小于 20 个字符', trigger: 'blur' },
+    ]
+}
 
 // 监听日期组件改变事件，并将开始结束时间设置到变量中
 const datepickerChange = (e) => {
@@ -113,8 +150,8 @@ const datepickerChange = (e) => {
     //console.log('开始时间：' + startDate.value + ', 结束时间：' + endDate.value)
 }
 
- // 每页展示数量变更事件
- const handleSizeChange = (chooseSize) => {
+// 每页展示数量变更事件
+const handleSizeChange = (chooseSize) => {
     size.value = chooseSize
     getTableData()
 }
@@ -129,16 +166,43 @@ const reset = () => {
 }
 
 function getTableData() {
-    getCategoryPageList({current: current.value, size: size.value, startDate: startDate.value, endDate: endDate.value, name: searchCategoryName.value})
-    .then((res) => {
-        if (res.success = true) {
-            tableData.value = res.data
-            current.value = res.current
-            size.value = res.size
-            total.value = res.total
-        }
-    })
+    getCategoryPageList({ current: current.value, size: size.value, startDate: startDate.value, endDate: endDate.value, name: searchCategoryName.value })
+        .then((res) => {
+            if (res.success = true) {
+                tableData.value = res.data
+                current.value = res.current
+                size.value = res.size
+                total.value = res.total
+            }
+        })
 }
 getTableData()
+
+// 新增取消
+const cancel = () => {
+    form.name = ''
+    dialogVisible.value = false
+}
+
+// 新增提交
+const onSubmit = () => {
+    formRef.value.validate((valid) => {
+        if (!valid) {
+            showMessage('请重新输入信息', 'warning')
+            return
+        }
+        addCategory(form).then((res) => {
+            if (res.success == true) {
+                showMessage('分类添加成功')
+                form.name = ''
+                dialogVisible.value = false
+                getTableData()
+            } else {
+                let message = res.message
+                showMessage(message, 'error')
+            }
+        })
+    })
+}
 
 </script>
