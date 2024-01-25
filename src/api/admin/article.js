@@ -9,3 +9,13 @@ export function getArticlePageList(data) {
 export function deleteArticle(id) {
     return axios.post("/admin/article/delete", {id})
 }
+
+// 获取分类 select 数据
+export function getCategorySelectList() {
+    return axios.post("/admin/category/select/list")
+}
+
+// 发布文章
+export function publishArticle(data) {
+    return axios.post("/admin/article/publish", data)
+}
