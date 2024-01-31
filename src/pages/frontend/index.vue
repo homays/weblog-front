@@ -235,12 +235,14 @@
                 </div>
             </aside>
         </div>
-
     </main>
+
+    <Footer></Footer>
 </template>
 
 <script setup>
 import Header from '@/layouts/frontend/components/Header.vue'
+import Footer from '@/layouts/frontend/components/Footer.vue'
 import { initTooltips } from 'flowbite'
 import { onMounted } from 'vue'
 
