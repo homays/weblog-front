@@ -66,7 +66,7 @@ const menus = [
     },
     {
         'name': '博客设置',
-        'icon': 'Settings',
+        'icon': 'Setting',
         'path': '/admin/blog/settings',
     },
 ]

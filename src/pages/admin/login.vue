@@ -63,8 +63,8 @@ const userStore = useUserStore()
 
 // 定义响应式的表单对象
 const form = reactive({
-    username: 'quanxiaoha',
-    password: 'quanxiaoha'
+    username: 'Arrebol',
+    password: '123456'
 })
 const formRef = ref(null)
 const loading = ref(false)
