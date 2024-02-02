@@ -30,7 +30,6 @@
 import { useTabList } from '@/composables/useTagList.js'
 
 const { menuStore, activeTab, tabList, tabChange, removeTab, handleCloseTab } = useTabList()
-
 </script>
 
 <style>
@@ -47,7 +46,7 @@ const { menuStore, activeTab, tabList, tabChange, removeTab, handleCloseTab } = 
 
 .el-tabs__item.is-active {
     background-color: var(--el-color-primary)!important;
-    color: #ffffff;
+    color: #fff;
 }
 
 .el-tabs__item.is-active::before {

@@ -39,8 +39,7 @@
                     </el-form-item>
                     <el-form-item>
                         <!-- 登录按钮，宽度设置为 100% -->
-                        <el-button class="w-full mt-2" size="large" :loading="loading" type="primary"
-                            @click="onSubmit">登录</el-button>
+                        <el-button class="w-full mt-2" size="large" :loading="loading" type="primary" @click="onSubmit">登录</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -53,12 +52,11 @@
 import { User, Lock } from '@element-plus/icons-vue'
 import { login } from '@/api/admin/user'
 import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
-import { useRouter } from 'vue-router';
-import { showMessage } from '@/composables/util'
+import { useRouter } from 'vue-router'
+import { showMessage} from '@/composables/util'
 import { setToken } from '@/composables/cookie'
 import { useUserStore } from '@/stores/user'
 
-const router = useRouter()
 const userStore = useUserStore()
 
 // 定义响应式的表单对象
@@ -66,31 +64,31 @@ const form = reactive({
     username: 'Arrebol',
     password: '123456'
 })
-const formRef = ref(null)
+
+const router = useRouter()
+// 登录按钮加载
 const loading = ref(false)
+
+// 表单引用
+const formRef = ref(null)
+// 表单验证规则
 const rules = {
     username: [
-        { required: true, message: '用户名不能为空', trigger: 'blur' }
+        {
+            required: true,
+            message: '用户名不能为空',
+            trigger: 'blur'
+        }
     ],
     password: [
-        { required: true, message: '密码不能为空', trigger: 'blur', }
+        {
+            required: true,
+            message: '密码不能为空',
+            trigger: 'blur',
+        },
     ]
 }
 
-// 回车键直接登录
-function onKeyUp(e) {
-    if (e.key == 'Enter') {
-        onSubmit()
-    }
-}
-onMounted(() => {
-    document.addEventListener('keyup', onKeyUp)
-})
-onBeforeUnmount(() => {
-    document.removeEventListener('keyup', onKeyUp)
-})
-
-// 登录
 const onSubmit = () => {
     console.log('登录')
     // 先验证 form 表单字段
@@ -132,4 +130,25 @@ const onSubmit = () => {
         })
     })
 }
+
+// 按回车键后，执行登录事件
+function onKeyUp(e) {
+    console.log(e)
+    if (e.key == 'Enter') {
+        onSubmit()
+    }
+}
+
+// 添加键盘监听
+onMounted(() => {
+    console.log('添加键盘监听')
+    document.addEventListener('keyup', onKeyUp)
+})
+
+// 移除键盘监听
+onBeforeUnmount(() => {
+    document.removeEventListener('keyup', onKeyUp)
+})
+
+
 </script>

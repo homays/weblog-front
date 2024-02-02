@@ -2,15 +2,12 @@
     <div>
         <!-- 卡片组件， shadow="never" 指定 card 卡片组件没有阴影 -->
         <el-card shadow="never">
-            <el-form :model="form" label-width="160px" :rules="rules" ref="formRef">
+            <el-form ref="formRef" :model="form" label-width="160px" :rules="rules">
                 <el-form-item label="博客名称" prop="name">
                     <el-input v-model="form.name" clearable />
                 </el-form-item>
                 <el-form-item label="作者名" prop="author">
                     <el-input v-model="form.author" clearable />
-                </el-form-item>
-                <el-form-item label="介绍语" prop="introduction">
-                    <el-input v-model="form.introduction" type="textarea" />
                 </el-form-item>
                 <el-form-item label="博客 LOGO" prop="logo">
                     <el-upload class="avatar-uploader" action="#" :on-change="handleLogoChange" :auto-upload="false"
@@ -29,6 +26,9 @@
                             <Plus />
                         </el-icon>
                     </el-upload>
+                </el-form-item>
+                <el-form-item label="介绍语" prop="introduction">
+                    <el-input v-model="form.introduction" type="textarea" />
                 </el-form-item>
                 <!-- 开启 Github 访问 -->
                 <el-form-item label="开启 GihHub 访问">
@@ -80,6 +80,19 @@ import { getBlogSettingsDetail, updateBlogSettings } from '@/api/admin/blogsetti
 import { uploadFile } from '@/api/admin/file'
 import { showMessage } from '@/composables/util'
 
+// 是否开启 GitHub
+const isGithubChecked = ref(false)
+// 是否开启 Gitee
+const isGiteeChecked = ref(false)
+// 是否开启知乎
+const isZhihuChecked = ref(false)
+// 是否开启 CSDN
+const isCSDNChecked = ref(false)
+// 是否显示保存按钮的 loading 状态，默认为 false
+const btnLoading = ref(false)
+
+// 表单引用
+const formRef = ref(null)
 // 表单对象
 const form = reactive({
     name: '',
@@ -101,19 +114,6 @@ const rules = {
     avatar: [{ required: true, message: '请上传作者头像', trigger: 'blur' }],
     introduction: [{ required: true, message: '请输入介绍语', trigger: 'blur' }],
 }
-
-// 是否开启 GitHub
-const isGithubChecked = ref(false)
-// 是否开启 Gitee
-const isGiteeChecked = ref(false)
-// 是否开启知乎
-const isZhihuChecked = ref(false)
-// 是否开启 CSDN
-const isCSDNChecked = ref(false)
-// 是否显示保存按钮的 loading 状态，默认为 false
-const btnLoading = ref(false)
-// 表单引用
-const formRef = ref(null)
 
 // 监听 Github Switch 改变事件
 const githubSwitchChange = (checked) => {
@@ -145,9 +145,8 @@ const csdnSwitchChange = (checked) => {
 
 // 初始化博客设置数据，并渲染到页面上
 function initBlogSettings() {
-    // 请求后台接口
     getBlogSettingsDetail().then((e) => {
-        if (e.success == true) {
+        if (e.success = true) {
             // 设置表单数据
             form.name = e.data.name
             form.author = e.data.author
@@ -155,7 +154,7 @@ function initBlogSettings() {
             form.avatar = e.data.avatar
             form.introduction = e.data.introduction
 
-            // 第三方平台信息设置，先判断后端返回平台链接是否为空，若不为空，则将 switch 组件置为选中状态，并设置表单对应数据
+            // 第三方平台信息设置
             if (e.data.githubHomepage) {
                 isGithubChecked.value = true
                 form.githubHomepage = e.data.githubHomepage
@@ -178,7 +177,6 @@ function initBlogSettings() {
         }
     })
 }
-// 手动调用一下初始化方法
 initBlogSettings()
 
 // 上传 logo 图片
@@ -226,7 +224,7 @@ const onSubmit = () => {
     // 先验证 form 表单字段
     formRef.value.validate((valid) => {
         if (!valid) {
-            showMessage('请重新输入信息', 'warning')
+            console.log('表单验证不通过')
             return false
         }
 
@@ -240,14 +238,25 @@ const onSubmit = () => {
                 showMessage(message, 'error')
                 return
             }
-
+            
             // 重新渲染页面中的信息
             initBlogSettings()
             showMessage('保存成功')
         }).finally(() => btnLoading.value = false) // 隐藏保存按钮 loading
     })
 }
+
+
 </script>
+
+<style scoped>
+.avatar-uploader .avatar {
+    width: 100px;
+    height: 100px;
+    display: block;
+}
+</style>
+
 <style>
 /* 解决 textarea :focus 状态下，边框消失的问题 */
 .el-textarea__inner:focus {

@@ -422,7 +422,7 @@ const onUploadImg = async (files, callback) => {
 // 文章分类
 const categories = ref([])
 getCategorySelectList().then((e) => {
-    //console.log('获取分类数据')
+    console.log('获取分类数据')
     categories.value = e.data
 })
 
@@ -431,14 +431,14 @@ const tagSelectLoading = ref(false)
 // 文章标签
 const tags = ref([])
 // 渲染标签数据
-getTagSelectList().then((res) => {
+getTagSelectList().then(res => {
     tags.value = res.data
 })
 
 
 // 根据用户输入的标签名称，远程模糊查询
 const remoteMethod = (query) => {
-    //console.log('远程搜索：' + tags.value)
+    console.log('远程搜索：' + tags.value)
     // 如果用户的查询关键词不为空
     if (query) {
         // 显示 loading

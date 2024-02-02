@@ -4,3 +4,5 @@ import axios from "@/axios";
 export function getArticlePageList(data) {
     return axios.post("/article/list", data)
 }
+
+

@@ -68,10 +68,10 @@
                     </el-tag>
                     <span class="w-20">
                         <el-input v-if="inputVisible" ref="InputRef" v-model="inputValue" class="ml-1 w-20" size="small"
-                            @keyup.enter="handleInputConfirm" @blur="handleInputConfirm" />
-                        <el-button v-else class="button-new-tag ml-1" size="small" @click="showInput">
-                            + 新增标签
-                        </el-button>
+                        @keyup.enter="handleInputConfirm" @blur="handleInputConfirm" />
+                    <el-button v-else class="button-new-tag ml-1" size="small" @click="showInput">
+                        + 新增标签
+                    </el-button>
                     </span>
                 </el-form-item>
             </el-form>
@@ -102,7 +102,7 @@ const datepickerChange = (e) => {
     startDate.value = moment(e[0]).format('YYYY-MM-DD')
     endDate.value = moment(e[1]).format('YYYY-MM-DD')
 
-    //console.log('开始时间：' + startDate.value + ', 结束时间：' + endDate.value)
+    console.log('开始时间：' + startDate.value + ', 结束时间：' + endDate.value)
 }
 
 const shortcuts = [
@@ -146,6 +146,7 @@ const total = ref(0)
 // 每页显示的数据量，给了个默认值 10
 const size = ref(10)
 
+
 // 获取分页数据
 function getTableData() {
     // 显示表格 loading
@@ -179,7 +180,6 @@ const reset = () => {
     pickDate.value = ''
     startDate.value = null
     endDate.value = null
-    getTableData()
 }
 
 // 对话框是否显示
@@ -190,6 +190,7 @@ const addCategoryBtnClick = () => {
     formDialogRef.value.open()
 }
 
+
 // 表单引用
 const formRef = ref(null)
 
@@ -197,6 +198,7 @@ const formRef = ref(null)
 const form = reactive({
     tags: []
 })
+
 
 const onSubmit = () => {
     // 先验证 form 表单字段
@@ -221,7 +223,6 @@ const onSubmit = () => {
                 showMessage(message, 'error')
             }
         }).finally(() => formDialogRef.value.closeBtnLoading()) // 隐藏提交按钮 loading
-
     })
 }
 
@@ -256,22 +257,22 @@ const inputVisible = ref(false)
 const InputRef = ref('')
 
 const handleClose = (tag) => {
-    dynamicTags.value.splice(dynamicTags.value.indexOf(tag), 1)
+  dynamicTags.value.splice(dynamicTags.value.indexOf(tag), 1)
 }
 
 const showInput = () => {
-    inputVisible.value = true
-    nextTick(() => {
-        InputRef.value.input.focus()
-    })
+  inputVisible.value = true
+  nextTick(() => {
+    InputRef.value.input.focus()
+  })
 }
 
 const handleInputConfirm = () => {
-    if (inputValue.value) {
-        dynamicTags.value.push(inputValue.value)
-    }
-    inputVisible.value = false
-    inputValue.value = ''
+  if (inputValue.value) {
+    dynamicTags.value.push(inputValue.value)
+  }
+  inputVisible.value = false
+  inputValue.value = ''
 }
 
 </script>
