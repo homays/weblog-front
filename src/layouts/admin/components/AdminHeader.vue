@@ -37,7 +37,7 @@
 
                 <!-- 登录用户头像 -->
                 <el-dropdown class="flex items-center justify-center" @command="handleCommand">
-                    <span class="el-dropdown-link flex items-center justify-center text-gray-700 text-xs">
+                    <span class="el-dropdown-link outline-none flex items-center justify-center text-gray-700 text-xs">
                         <!-- 头像 Avatar -->
                         <el-avatar class="mr-2" :size="25"
                             src="https://img.quanxiaoha.com/quanxiaoha/f97361c0429d4bb1bc276ab835843065.jpg" />
@@ -48,6 +48,7 @@
                     </span>
                     <template #dropdown>
                         <el-dropdown-menu>
+                            <el-dropdown-item command="front">进入前台</el-dropdown-item>
                             <el-dropdown-item command="updatePassword">修改密码</el-dropdown-item>
                             <el-dropdown-item command="logout">退出登录</el-dropdown-item>
                         </el-dropdown-menu>
@@ -113,6 +114,8 @@ const handleCommand = (command) => {
         formDialogRef.value.open()
     } else if (command == 'logout') { // 退出登录
         logout()
+    } else if (command == 'front') {
+        router.push('/')
     }
 }
 
