@@ -103,7 +103,12 @@
 
             <!-- 右边侧边栏，占用一列 -->
             <aside class="col-span-4 md:col-span-1">
+                <!-- 个人信息 -->
                 <UserInfoCard></UserInfoCard>
+                <!-- 分类 -->
+                <CategoryListCard></CategoryListCard>
+                <!-- 标签 -->
+                <TagListCard></TagListCard>
             </aside>
     </div>
 
@@ -116,6 +121,8 @@
 import Header from '@/layouts/frontend/components/Header.vue'
 import Footer from '@/layouts/frontend/components/Footer.vue'
 import UserInfoCard from '@/layouts/frontend/components/UserInfoCard.vue'
+import CategoryListCard from '@/layouts/frontend/components/CategoryListCard.vue'
+import TagListCard from '@/layouts/frontend/components/TagListCard.vue'
 import { initTooltips } from 'flowbite'
 import { onMounted, ref } from 'vue'
 import { getArticlePageList } from '@/api/frontend/article'
