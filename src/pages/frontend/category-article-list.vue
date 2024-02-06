@@ -18,14 +18,14 @@
                         </svg>
                         {{ categoryName }}
                     </h1>
-                    <ol v-if="articles.length > 0" class="mt-3 divide-y divider-gray-200 dark:divide-gray-700">
-                        <li>
+                    <ol v-if="articles && articles.length > 0" class="mt-3 divide-y divider-gray-200 dark:divide-gray-700">
+                        <li v-for="(article, index) in articles" :key="index">
                             <a href="#" class="items-center block p-3 sm:flex hover:bg-gray-100 dark:hover:bg-gray-700">
                                 <img class="w-24 h-12 mb-3 mr-3 rounded-lg sm:mb-0"
-                                    src="https://img.quanxiaoha.com/quanxiaoha/193dd1504ebb4f138085acb23619e0dd.jpg" />
+                                    :src="article.cover" />
                                 <div class="text-gray-600 dark:text-gray-400">
                                     <h2 class="text-base font-normal text-gray-900">
-                                        111
+                                        {{ article.title }}
                                     </h2>
                                     <span
                                         class="inline-flex items-center text-xs font-normal text-gray-500 dark:text-gray-400">
@@ -36,51 +36,7 @@
                                                 stroke-width="2"
                                                 d="M5 1v3m5-3v3m5-3v3M1 7h18M5 11h10M2 3h16a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" />
                                         </svg>
-                                        2019-10-10
-                                    </span>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="items-center block p-3 sm:flex hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <img class="w-24 h-12 mb-3 mr-3 rounded-lg sm:mb-0"
-                                    src="https://img.quanxiaoha.com/quanxiaoha/193dd1504ebb4f138085acb23619e0dd.jpg" />
-                                <div class="text-gray-600 dark:text-gray-400">
-                                    <h2 class="text-base font-normal text-gray-900">
-                                        111
-                                    </h2>
-                                    <span
-                                        class="inline-flex items-center text-xs font-normal text-gray-500 dark:text-gray-400">
-                                        <svg class="inline w-2.5 h-2.5 mr-2 text-gray-400 dark:text-white"
-                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                            viewBox="0 0 20 20">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M5 1v3m5-3v3m5-3v3M1 7h18M5 11h10M2 3h16a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" />
-                                        </svg>
-                                        2019-10-10
-                                    </span>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="items-center block p-3 sm:flex hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <img class="w-24 h-12 mb-3 mr-3 rounded-lg sm:mb-0"
-                                    src="https://img.quanxiaoha.com/quanxiaoha/193dd1504ebb4f138085acb23619e0dd.jpg" />
-                                <div class="text-gray-600 dark:text-gray-400">
-                                    <h2 class="text-base font-normal text-gray-900">
-                                        111
-                                    </h2>
-                                    <span
-                                        class="inline-flex items-center text-xs font-normal text-gray-500 dark:text-gray-400">
-                                        <svg class="inline w-2.5 h-2.5 mr-2 text-gray-400 dark:text-white"
-                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                            viewBox="0 0 20 20">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M5 1v3m5-3v3m5-3v3M1 7h18M5 11h10M2 3h16a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" />
-                                        </svg>
-                                        2019-10-10
+                                        {{ article.createDate }}
                                     </span>
                                 </div>
                             </a>
@@ -260,8 +216,9 @@
                     </svg>
                     <p class="mt-2 mb-16 text-gray-400">此分类下还未发布文章哟~</p>
                 </div>
-                <!-- 分页 -->
-                <nav v-if="articles.length > 0" aria-label="Page navigation example" class="mt-10 flex justify-center">
+            </div>
+             <!-- 分页 -->
+             <nav v-if="pages> 1" aria-label="Page navigation example" class="mt-10 flex justify-center">
                     <ul class="flex items-center -space-x-px h-10 text-base">
                         <!-- 上一页 -->
                         <li>
@@ -297,8 +254,6 @@
                         </li>
                     </ul>
                 </nav>
-            </div>
-
         </div>
 
         <!-- 右边侧边栏，占用一列 -->
@@ -326,6 +281,7 @@ import TagListCard from '@/layouts/frontend/components/TagListCard.vue'
 import CategoryListCard from '@/layouts/frontend/components/CategoryListCard.vue'
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { getCategoryArticlePageList } from '@/api/frontend/category'
 
 const route = useRoute()
 
@@ -340,5 +296,32 @@ const articles = ref([])
 watch(route, (newRoute, oldRoute) => {
     categoryName.value = newRoute.query.name
     categoryId.value = newRoute.query.id
+    getCategoryArticles(current.value)
 })
+
+// 当前页码
+const current = ref(1)
+// 每页显示的文章数
+const size = ref(5)
+// 总文章数
+const total = ref(0)
+// 总共多少页
+const pages = ref(0)
+
+function getCategoryArticles(currentNo) {
+    // 上下页是否能点击判断，当要跳转上一页且页码小于 1 时，则不允许跳转；当要跳转下一页且页码大于总页数时，则不允许跳转
+    if (currentNo < 1 || (pages.value > 0 && currentNo > pages.value)) return
+    // 调用分页接口渲染数据
+    getCategoryArticlePageList({current: currentNo, size: size.value, id: categoryId.value}).then((res) => {
+        if (res.success) {
+            articles.value = res.data
+            current.value = res.current
+            size.value = res.size
+            total.value = res.total
+            pages.value = res.pages
+            console.log(articles)
+        }
+    })
+}
+getCategoryArticles(current.value)
 </script>
