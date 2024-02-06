@@ -8,6 +8,7 @@ import AdminBlogSettings from '@/pages/admin/blog-settings.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Admin from '@/layouts/admin/admin.vue'
 import ArchiveList from '@/pages/frontend/archive-list.vue'
+import CategoryList from '@/pages/frontend/category-list.vue'
 
 // 统一在这里声明所有路由
 const routes = [
@@ -73,6 +74,13 @@ const routes = [
         component: ArchiveList,
         meta: { // meta 信息
             title: 'Weblog 归档页'
+        }
+    },
+    {
+        path: '/category/list', // 分类页
+        component: CategoryList,
+        meta: { // meta 信息
+            title: 'Weblog 分类页'
         }
     },
 ]
