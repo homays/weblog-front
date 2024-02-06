@@ -9,6 +9,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Admin from '@/layouts/admin/admin.vue'
 import ArchiveList from '@/pages/frontend/archive-list.vue'
 import CategoryList from '@/pages/frontend/category-list.vue'
+import CategoryArticleList from '@/pages/frontend/category-article-list.vue'
 
 // 统一在这里声明所有路由
 const routes = [
@@ -81,6 +82,13 @@ const routes = [
         component: CategoryList,
         meta: { // meta 信息
             title: 'Weblog 分类页'
+        }
+    },
+    {
+        path: '/category/article/list', // 分类文章页
+        component: CategoryArticleList,
+        meta: { // meta 信息
+            title: 'Weblog 分类文章页'
         }
     },
 ]
