@@ -141,6 +141,9 @@
 
     </main>
 
+    <!-- 返回顶部 -->
+    <ScrollToTopButton></ScrollToTopButton>
+
     <Footer></Footer>
 </template>
 
@@ -156,6 +159,7 @@ import { ref, watch, onMounted } from 'vue'
 import hljs from 'highlight.js'
 // 代码高亮样式
 import 'highlight.js/styles/tokyo-night-dark.css'
+import ScrollToTopButton from '@/layouts/frontend/components/ScrollToTopButton.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -170,8 +174,8 @@ function refreshArticleDetail(articleId) {
     getArticleDetail(route.params.articleId).then((res) => {
         // 该文章不存在(错误码为 20010)
         if (!res.success && res.errorCode == '20010') {
-        	// 手动跳转 404 页面
-            router.push({name : 'NotFound'})
+            // 手动跳转 404 页面
+            router.push({ name: 'NotFound' })
             return
         }
 
@@ -206,7 +210,7 @@ onMounted(() => {
     const observer = new MutationObserver(mutationsList => {
         for (let mutation of mutationsList) {
             if (mutation.type === 'childList') {
-            	// 获取所有 pre code 节点
+                // 获取所有 pre code 节点
                 let highlight = document.querySelectorAll('pre code')
                 // 循环高亮
                 highlight.forEach((block) => {
@@ -216,7 +220,7 @@ onMounted(() => {
         }
     })
 
-	// 配置监视子节点的变化
+    // 配置监视子节点的变化
     const config = { childList: true, subtree: true }
     // 开始观察正文内容变化
     observer.observe(articleContentRef.value, config)
@@ -225,11 +229,11 @@ onMounted(() => {
 <style scoped>
 /* h1, h2, h3, h4, h5, h6 标题样式 */
 ::v-deep(.article-content h1,
-.article-content h2,
-.article-content h3,
-.article-content h4,
-.article-content h5,
-.article-content h6) {
+    .article-content h2,
+    .article-content h3,
+    .article-content h4,
+    .article-content h5,
+    .article-content h6) {
     color: #292525;
     line-height: 150%;
     font-family: PingFang SC, Helvetica Neue, Helvetica, Hiragino Sans GB, Microsoft YaHei, "\5FAE\8F6F\96C5\9ED1", Arial, sans-serif;
@@ -274,6 +278,7 @@ onMounted(() => {
     margin-bottom: 14px;
     font-weight: 600;
 }
+
 /* p 段落样式 */
 ::v-deep(.article-content p) {
     letter-spacing: .3px;
@@ -285,6 +290,7 @@ onMounted(() => {
     word-wrap: break-word;
     font-family: -apple-system, BlinkMacSystemFont, PingFang SC, Hiragino Sans GB, Microsoft Yahei, Arial, sans-serif;
 }
+
 /* blockquote 引用样式 */
 ::v-deep(.article-content blockquote) {
     border-left: 2.3px solid rgb(52, 152, 219);
@@ -300,10 +306,12 @@ onMounted(() => {
 ::v-deep(.article-content blockquote p:last-child) {
     margin-bottom: 0;
 }
+
 /* 斜体样式 */
 ::v-deep(.article-content em) {
     color: #c849ff;
 }
+
 /* 超链接样式 */
 ::v-deep(.article-content a) {
     color: #167bc2;
@@ -312,6 +320,7 @@ onMounted(() => {
 ::v-deep(.article-content a:hover) {
     text-decoration: underline;
 }
+
 /* ul 样式 */
 ::v-deep(.article-content ul) {
     padding-left: 2rem;
@@ -329,17 +338,19 @@ onMounted(() => {
 }
 
 ::v-deep(.article-content ul li p) {
-    margin-bottom: 0!important;
+    margin-bottom: 0 !important;
 }
 
 ::v-deep(.article-content ul ul li) {
     list-style-type: square;
 }
+
 /* ol 样式 */
 ::v-deep(.article-content ol) {
     list-style-type: decimal;
     padding-left: 2rem;
 }
+
 /* 图片样式 */
 ::v-deep(.article-content img) {
     max-width: 100%;
@@ -350,9 +361,10 @@ onMounted(() => {
 }
 
 ::v-deep(.article-content img:hover,
-img:focus) {
+    img:focus) {
     box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, .15);
 }
+
 /* 图片描述文字 */
 ::v-deep(.image-caption) {
     min-width: 20%;
@@ -365,6 +377,7 @@ img:focus) {
     color: #999;
     text-align: center;
 }
+
 /* pre code 样式 */
 ::v-deep(code) {
     font-size: 98%;
@@ -393,6 +406,7 @@ img:focus) {
     position: absolute;
     width: 10px;
 }
+
 /* code 样式 */
 ::v-deep(.article-content code:not(pre code)) {
     padding: 2px 4px;
@@ -403,6 +417,7 @@ img:focus) {
     background-color: rgba(27, 31, 35, 0.05);
     font-family: Operator Mono, Consolas, Monaco, Menlo, monospace;
 }
+
 /* 表格样式 */
 ::v-deep(table) {
     margin-bottom: 20px;
@@ -427,8 +442,8 @@ img:focus) {
 ::v-deep(table tr:nth-child(2n)) {
     background-color: #f6f8fa;
 }
+
 /* hr 横线 */
 ::v-deep(hr) {
     margin-bottom: 20px;
-}
-</style>
+}</style>
