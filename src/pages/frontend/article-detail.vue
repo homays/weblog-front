@@ -14,7 +14,7 @@
                     <nav class="flex text-gray-500" aria-label="Breadcrumb">
                         <ol class="inline-flex items-center space-x-1 md:space-x-3">
                             <li class="inline-flex items-center">
-                                <a href="#"
+                                <a href="/"
                                     class="inline-flex items-center text-sm font-medium hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
                                     <svg class="w-3 h-3 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                         fill="currentColor" viewBox="0 0 20 20">
@@ -28,7 +28,7 @@
                                 <div class="flex items-center">
                                     /
                                     <a href="#"
-                                        class="ml-1 text-sm font-medium md:ml-2 dark:text-gray-400 dark:hover:text-white">正文</a>
+                                        class="ml-1 text-sm font-medium md:ml-3 dark:text-gray-400 dark:hover:text-white">正文</a>
                                 </div>
                             </li>
                         </ol>
@@ -46,7 +46,7 @@
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M5 1v3m5-3v3m5-3v3M1 7h18M5 11h10M2 3h16a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" />
                             </svg>
-                            <span class="hidden md:inline">发表于</span> {{ article.createTime }}
+                            <span class="mr-1 hidden md:inline">发表于</span> {{ article.createTime }}
 
                             <!-- 分类 -->
                             <svg class="inline w-3 h-3 ml-5 mr-2 dark:text-white" aria-hidden="true"
@@ -55,7 +55,6 @@
                                     d="M1 5v11a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H1Zm0 0V2a1 1 0 0 1 1-1h5.443a1 1 0 0 1 .8.4l2.7 3.6H1Z" />
                             </svg>
                             <span class="hidden md:inline">分类于</span>
-                            <!-- 分类 -->
                             <a @click="goCategoryArticleListPage(article.categoryId, article.categoryName)"
                                 class="cursor-pointer mr-1 hover:underline">{{ article.categoryName }}</a>
 
@@ -67,7 +66,7 @@
                                     <path d="M10 13c4.97 0 9-2.686 9-6s-4.03-6-9-6-9 2.686-9 6 4.03 6 9 6Z" />
                                 </g>
                             </svg>
-                            <span class="hidden md:inline">阅读量</span> {{ article.readNum }}
+                            <span class="mr-1 hidden md:inline">阅读量</span> {{ article.readNum }}
                         </div>
 
                         <!-- 正文 -->
@@ -149,7 +148,6 @@ import Footer from '@/layouts/frontend/components/Footer.vue'
 import UserInfoCard from '@/layouts/frontend/components/UserInfoCard.vue'
 import TagListCard from '@/layouts/frontend/components/TagListCard.vue'
 import CategoryListCard from '@/layouts/frontend/components/CategoryListCard.vue'
-
 import { getArticleDetail } from '@/api/frontend/article'
 import { useRoute, useRouter } from 'vue-router'
 import { ref, watch } from 'vue'
@@ -159,24 +157,19 @@ const router = useRouter()
 // 路由传递过来的文章 ID
 console.log(route.params.articleId)
 
-// 监听路由
-watch(route, (newRoute, oldRoute) => {
-    // 重新渲染文章详情
-    refreshArticleDetail(newRoute.params.articleId)
-})
-
 // 文章数据
 const article = ref({})
 
 // 获取文章详情
 function refreshArticleDetail(articleId) {
-    getArticleDetail(articleId).then((res) => {
+    getArticleDetail(route.params.articleId).then((res) => {
         if (res.success) {
             article.value = res.data
         }
     })
 }
 refreshArticleDetail(route.params.articleId)
+
 
 // 跳转分类文章列表页
 const goCategoryArticleListPage = (id, name) => {
@@ -189,4 +182,10 @@ const goTagArticleListPage = (id, name) => {
     // 跳转时通过 query 携带参数（标签 ID、标签名称）
     router.push({ path: '/tag/article/list', query: { id, name } })
 }
+
+// 监听路由
+watch(route, (newRoute, oldRoute) => {
+    // 重新渲染文章详情
+    refreshArticleDetail(newRoute.params.articleId)
+})
 </script>

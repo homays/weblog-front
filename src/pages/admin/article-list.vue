@@ -76,7 +76,7 @@
                         <h4 class="font-bold">写文章</h4>
                         <!-- 靠右对齐 -->
                         <div class="ml-auto flex">
-                            <el-button @click="cancel">取消</el-button>
+                            <el-button @click="isArticlePublishEditorShow = false">取消</el-button>
                             <el-button type="primary" @click="publishArticleSubmit">
                                 <el-icon class="mr-1">
                                     <Promotion />
@@ -140,7 +140,7 @@
                         <h4 class="font-bold">编辑文章</h4>
                         <!-- 靠右对齐 -->
                         <div class="ml-auto flex">
-                            <el-button @click="cancel">取消</el-button>
+                            <el-button @click="isArticleUpdateEditorShow = false">取消</el-button>
                             <el-button type="primary" @click="updateSubmit">
                                 <el-icon class="mr-1">
                                     <Promotion />
@@ -513,19 +513,9 @@ const showArticleUpdateEditor = (row) => {
     })
 }
 
-// 关闭文章
-const cancel = () => {
-    form.title = ''
-    form.content = ''
-    form.cover = ''
-    form.summary = ''
-    form.categoryId = null
-    form.tags = []
-    isArticlePublishEditorShow.value = false
-}
-
 // 保存文章
 const updateSubmit = () => {
+    console.log('tijiao')
     updateArticleFormRef.value.validate((valid) => {
         // 校验表单
         if (!valid) {
