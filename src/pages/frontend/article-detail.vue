@@ -168,9 +168,14 @@ const article = ref({})
 // 获取文章详情
 function refreshArticleDetail(articleId) {
     getArticleDetail(route.params.articleId).then((res) => {
-        if (res.success) {
-            article.value = res.data
+        // 该文章不存在(错误码为 20010)
+        if (!res.success && res.errorCode == '20010') {
+        	// 手动跳转 404 页面
+            router.push({name : 'NotFound'})
+            return
         }
+
+        article.value = res.data
     })
 }
 refreshArticleDetail(route.params.articleId)
