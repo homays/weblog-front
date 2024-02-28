@@ -70,7 +70,7 @@
                         </div>
 
                         <!-- 正文 -->
-                        <div class="mt-5" v-html="article.content"></div>
+                        <div class="mt-5 article-content" v-html="article.content"></div>
 
                         <!-- 标签集合 -->
                         <div v-if="article.tags && article.tags.length > 0" class="mt-5">
@@ -126,14 +126,16 @@
 
             <!-- 右边侧边栏，占用一列 -->
             <aside class="col-span-4 md:col-span-1">
-                <!-- 博主信息 -->
-                <UserInfoCard></UserInfoCard>
+                <div class="sticky top-[5.5rem]">
+                    <!-- 博主信息 -->
+                    <UserInfoCard></UserInfoCard>
 
-                <!-- 分类 -->
-                <CategoryListCard></CategoryListCard>
+                    <!-- 分类 -->
+                    <CategoryListCard></CategoryListCard>
 
-                <!-- 标签 -->
-                <TagListCard></TagListCard>
+                    <!-- 标签 -->
+                    <TagListCard></TagListCard>
+                </div>
             </aside>
         </div>
 
@@ -189,3 +191,185 @@ watch(route, (newRoute, oldRoute) => {
     refreshArticleDetail(newRoute.params.articleId)
 })
 </script>
+<style scoped>
+/* h1, h2, h3, h4, h5, h6 标题样式 */
+::v-deep(.article-content h1,
+.article-content h2,
+.article-content h3,
+.article-content h4,
+.article-content h5,
+.article-content h6) {
+    color: #292525;
+    line-height: 150%;
+    font-family: PingFang SC, Helvetica Neue, Helvetica, Hiragino Sans GB, Microsoft YaHei, "\5FAE\8F6F\96C5\9ED1", Arial, sans-serif;
+}
+
+::v-deep(.article-content h2) {
+    line-height: 1.5;
+    font-weight: 700;
+    font-synthesis: style;
+    font-size: 24px;
+    margin-top: 40px;
+    margin-bottom: 26px;
+    line-height: 140%;
+    border-bottom: 1px solid rgb(241 245 249);
+    padding-bottom: 15px;
+}
+
+::v-deep(.article-content h3) {
+    font-size: 20px;
+    margin-top: 40px;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+::v-deep(.article-content h4) {
+    font-size: 18px;
+    margin-top: 30px;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+::v-deep(.article-content h5) {
+    font-size: 16px;
+    margin-top: 30px;
+    margin-bottom: 14px;
+    font-weight: 600;
+}
+
+::v-deep(.article-content h6) {
+    font-size: 16px;
+    margin-top: 30px;
+    margin-bottom: 14px;
+    font-weight: 600;
+}
+/* p 段落样式 */
+::v-deep(.article-content p) {
+    letter-spacing: .3px;
+    margin: 0 0 20px;
+    line-height: 30px;
+    color: #4c4e4d;
+    font-weight: 400;
+    word-break: normal;
+    word-wrap: break-word;
+    font-family: -apple-system, BlinkMacSystemFont, PingFang SC, Hiragino Sans GB, Microsoft Yahei, Arial, sans-serif;
+}
+/* blockquote 引用样式 */
+::v-deep(.article-content blockquote) {
+    border-left: 2.3px solid rgb(52, 152, 219);
+    quotes: none;
+    background: rgb(236, 240, 241);
+    color: #777;
+    font-size: 16px;
+    margin-bottom: 20px;
+    padding: 24px;
+}
+
+/* 设置 blockquote 中最后一个 p 标签的 margin-bottom 为 0 */
+::v-deep(.article-content blockquote p:last-child) {
+    margin-bottom: 0;
+}
+/* 斜体样式 */
+::v-deep(.article-content em) {
+    color: #c849ff;
+}
+/* 超链接样式 */
+::v-deep(.article-content a) {
+    color: #167bc2;
+}
+
+::v-deep(.article-content a:hover) {
+    text-decoration: underline;
+}
+/* ul 样式 */
+::v-deep(.article-content ul) {
+    padding-left: 2rem;
+}
+
+::v-deep(.article-content > ul) {
+    margin-bottom: 20px;
+}
+
+::v-deep(.article-content ul li) {
+    list-style-type: disc;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 16px;
+}
+
+::v-deep(.article-content ul li p) {
+    margin-bottom: 0!important;
+}
+
+::v-deep(.article-content ul ul li) {
+    list-style-type: square;
+}
+/* ol 样式 */
+::v-deep(.article-content ol) {
+    list-style-type: decimal;
+    padding-left: 2rem;
+}
+/* 图片样式 */
+::v-deep(.article-content img) {
+    max-width: 100%;
+    overflow: hidden;
+    display: block;
+    margin: 0 auto;
+    border-radius: 8px;
+}
+
+::v-deep(.article-content img:hover,
+img:focus) {
+    box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, .15);
+}
+/* 图片描述文字 */
+::v-deep(.image-caption) {
+    min-width: 20%;
+    max-width: 80%;
+    min-height: 43px;
+    display: block;
+    padding: 10px;
+    margin: 0 auto;
+    font-size: 13px;
+    color: #999;
+    text-align: center;
+}
+/* code 样式 */
+::v-deep(.article-content code:not(pre code)) {
+    padding: 2px 4px;
+    margin: 0 2px;
+    font-size: 95% !important;
+    border-radius: 4px;
+    color: rgb(41, 128, 185);
+    background-color: rgba(27, 31, 35, 0.05);
+    font-family: Operator Mono, Consolas, Monaco, Menlo, monospace;
+}
+/* 表格样式 */
+::v-deep(table) {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+::v-deep(table tr) {
+    background-color: #fff;
+    border-top: 1px solid #c6cbd1;
+}
+
+::v-deep(table th) {
+    padding: 6px 13px;
+    border: 1px solid #dfe2e5;
+}
+
+::v-deep(table td) {
+    padding: 6px 13px;
+    border: 1px solid #dfe2e5;
+}
+
+::v-deep(table tr:nth-child(2n)) {
+    background-color: #f6f8fa;
+}
+/* hr 横线 */
+::v-deep(hr) {
+    margin-bottom: 20px;
+}
+</style>
