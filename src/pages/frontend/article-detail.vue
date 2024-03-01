@@ -2,7 +2,7 @@
     <Header></Header>
 
     <!-- 主内容区域 -->
-    <main class="container max-w-screen-xl mx-auto p-4 px-6">
+    <main class="container max-w-screen-xl mx-auto p-4">
         <!-- grid 表格布局，分为 4 列 -->
         <div class="grid grid-cols-4 gap-7">
             <!-- 左边栏，占用 3 列 -->
@@ -11,7 +11,7 @@
                 <div
                     class="w-full p-5 mb-3 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700">
                     <!-- 面包屑 -->
-                    <nav class="flex text-gray-500" aria-label="Breadcrumb">
+                    <nav class="flex text-gray-400" aria-label="Breadcrumb">
                         <ol class="inline-flex items-center space-x-1 md:space-x-3">
                             <li class="inline-flex items-center">
                                 <a href="/"
@@ -121,12 +121,13 @@
                     </article>
 
 
+
                 </div>
             </div>
 
             <!-- 右边侧边栏，占用一列 -->
             <aside class="col-span-4 md:col-span-1">
-                <div class="sticky top-[5.5rem]">
+                <div>
                     <!-- 博主信息 -->
                     <UserInfoCard></UserInfoCard>
 
@@ -136,9 +137,12 @@
                     <!-- 标签 -->
                     <TagListCard></TagListCard>
                 </div>
+                
+                <!-- 文章目录 -->
+                <Toc></Toc>
+
             </aside>
         </div>
-
     </main>
 
     <!-- 返回顶部 -->
@@ -153,13 +157,13 @@ import Footer from '@/layouts/frontend/components/Footer.vue'
 import UserInfoCard from '@/layouts/frontend/components/UserInfoCard.vue'
 import TagListCard from '@/layouts/frontend/components/TagListCard.vue'
 import CategoryListCard from '@/layouts/frontend/components/CategoryListCard.vue'
+import ScrollToTopButton from '@/layouts/frontend/components/ScrollToTopButton.vue'
+import Toc from '@/layouts/frontend/components/Toc.vue'
 import { getArticleDetail } from '@/api/frontend/article'
 import { useRoute, useRouter } from 'vue-router'
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import hljs from 'highlight.js'
-// 代码高亮样式
 import 'highlight.js/styles/tokyo-night-dark.css'
-import ScrollToTopButton from '@/layouts/frontend/components/ScrollToTopButton.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -184,7 +188,6 @@ function refreshArticleDetail(articleId) {
 }
 refreshArticleDetail(route.params.articleId)
 
-
 // 跳转分类文章列表页
 const goCategoryArticleListPage = (id, name) => {
     // 跳转时通过 query 携带参数（分类 ID、分类名称）
@@ -203,7 +206,6 @@ watch(route, (newRoute, oldRoute) => {
     refreshArticleDetail(newRoute.params.articleId)
 })
 
-// 正文 div 引用
 const articleContentRef = ref(null)
 onMounted(() => {
     // 使用 MutationObserver 监视 DOM 的变化
@@ -214,7 +216,7 @@ onMounted(() => {
                 let highlight = document.querySelectorAll('pre code')
                 // 循环高亮
                 highlight.forEach((block) => {
-                    hljs.highlightBlock(block)
+                    hljs.highlightElement(block)
                 })
             }
         }
@@ -222,24 +224,106 @@ onMounted(() => {
 
     // 配置监视子节点的变化
     const config = { childList: true, subtree: true }
-    // 开始观察正文内容变化
+    // 开始观察内容变化
     observer.observe(articleContentRef.value, config)
 })
+
+// const activeHeadingIndex = ref(-1)
+// function handleContentScroll() {
+    
+//     let scrollY = window.scrollY
+//     console.log('滚动事件触发, scroll-y:' + scrollY)
+//     titles.value.forEach(title => {
+//         let scrollTop = title.scrollTop
+//         console.log('父类 scrollTop:' + scrollTop)
+//         if (scrollY >= scrollTop) {
+//             activeHeadingIndex.value = title.index
+//         }
+//         // 子
+//         let children = title.children
+//         if (children && children.length > 0) {
+
+//             children.forEach(child => {
+//             let childScrollTop = child.scrollTop
+//             console.log('子类 scrollTop:' + childScrollTop)
+//             if (scrollY >= childScrollTop) {
+//                 activeHeadingIndex.value = child.index
+//             }
+//         })
+//         }
+//     })
+
+//     console.log(activeHeadingIndex.value)
+
+// }
+
+// onBeforeUnmount(() => window.removeEventListener('scroll', handleContentScroll))
+
+// // 滚动到指定的位置
+// function scrollToView(scrollTop) {
+//     window.scrollTo({ top: scrollTop, behavior: "smooth" });
+// }
+
+// function initToc() {
+//     let titlesArr = []
+//     let levels = ['h2', 'h3']
+//     let container = document.querySelector('.article-content')
+
+//     if (!container) {
+//         return titles
+//     }
+
+//     let headings = container.querySelectorAll(levels)
+//     console.log(headings)
+
+//     let index = 1
+//     headings.forEach(heading => {
+//         let headingLevel = parseInt(heading.tagName.substring(1))
+//         let headingText = heading.innerText
+//         let scrollTop = heading.offsetTop - 95
+//         console.log('index: ' + index)
+
+//         if (headingLevel === 2) {
+//             titlesArr.push({
+//                 index,
+//                 level: headingLevel,
+//                 text: headingText,
+//                 id: headingText,
+//                 scrollTop: scrollTop,
+//                 children: []
+//             })
+//         } else { // 子标题
+//             let parentHeading = titlesArr[titlesArr.length - 1]
+//             parentHeading.children.push({
+//                 index,
+//                 level: headingLevel,
+//                 text: headingText,
+//                 scrollTop: scrollTop,
+//             })
+//         }
+//         index++
+//     })
+
+//     console.log('重新组合后的')
+//     console.log(titlesArr)
+//     titles.value = titlesArr
+// }
 </script>
-<style scoped>
+
+<style>
 /* h1, h2, h3, h4, h5, h6 标题样式 */
-::v-deep(.article-content h1,
-    .article-content h2,
-    .article-content h3,
-    .article-content h4,
-    .article-content h5,
-    .article-content h6) {
+.article-content h1,
+.article-content h2,
+.article-content h3,
+.article-content h4,
+.article-content h5,
+.article-content h6 {
     color: #292525;
     line-height: 150%;
     font-family: PingFang SC, Helvetica Neue, Helvetica, Hiragino Sans GB, Microsoft YaHei, "\5FAE\8F6F\96C5\9ED1", Arial, sans-serif;
 }
 
-::v-deep(.article-content h2) {
+.article-content h2 {
     line-height: 1.5;
     font-weight: 700;
     font-synthesis: style;
@@ -251,28 +335,22 @@ onMounted(() => {
     padding-bottom: 15px;
 }
 
-::v-deep(.article-content h3) {
+.article-content h3 {
     font-size: 20px;
     margin-top: 40px;
     margin-bottom: 16px;
     font-weight: 600;
 }
 
-::v-deep(.article-content h4) {
+.article-content h4 {
     font-size: 18px;
     margin-top: 30px;
     margin-bottom: 16px;
     font-weight: 600;
 }
 
-::v-deep(.article-content h5) {
-    font-size: 16px;
-    margin-top: 30px;
-    margin-bottom: 14px;
-    font-weight: 600;
-}
-
-::v-deep(.article-content h6) {
+.article-content h5,
+h6 {
     font-size: 16px;
     margin-top: 30px;
     margin-bottom: 14px;
@@ -280,7 +358,7 @@ onMounted(() => {
 }
 
 /* p 段落样式 */
-::v-deep(.article-content p) {
+.article-content p {
     letter-spacing: .3px;
     margin: 0 0 20px;
     line-height: 30px;
@@ -292,67 +370,55 @@ onMounted(() => {
 }
 
 /* blockquote 引用样式 */
-::v-deep(.article-content blockquote) {
+.article-content blockquote {
     border-left: 2.3px solid rgb(52, 152, 219);
     quotes: none;
     background: rgb(236, 240, 241);
     color: #777;
     font-size: 16px;
-    margin-bottom: 20px;
+    margin: 2em 0;
     padding: 24px;
 }
 
 /* 设置 blockquote 中最后一个 p 标签的 margin-bottom 为 0 */
-::v-deep(.article-content blockquote p:last-child) {
+.article-content blockquote p:last-child {
     margin-bottom: 0;
 }
 
 /* 斜体样式 */
-::v-deep(.article-content em) {
+.article-content em {
     color: #c849ff;
 }
 
 /* 超链接样式 */
-::v-deep(.article-content a) {
+.article-content a {
     color: #167bc2;
 }
 
-::v-deep(.article-content a:hover) {
+.article-content a:hover {
     text-decoration: underline;
 }
 
 /* ul 样式 */
-::v-deep(.article-content ul) {
+.article-content ul {
     padding-left: 2rem;
 }
 
-::v-deep(.article-content > ul) {
-    margin-bottom: 20px;
-}
-
-::v-deep(.article-content ul li) {
+.article-content ul li {
     list-style-type: disc;
     padding-top: 5px;
     padding-bottom: 5px;
     font-size: 16px;
 }
 
-::v-deep(.article-content ul li p) {
-    margin-bottom: 0 !important;
-}
-
-::v-deep(.article-content ul ul li) {
-    list-style-type: square;
-}
-
 /* ol 样式 */
-::v-deep(.article-content ol) {
+.article-content ol {
     list-style-type: decimal;
     padding-left: 2rem;
 }
 
 /* 图片样式 */
-::v-deep(.article-content img) {
+.article-content img {
     max-width: 100%;
     overflow: hidden;
     display: block;
@@ -360,13 +426,13 @@ onMounted(() => {
     border-radius: 8px;
 }
 
-::v-deep(.article-content img:hover,
-    img:focus) {
+.article-content img:hover,
+img:focus {
     box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, .15);
 }
 
 /* 图片描述文字 */
-::v-deep(.image-caption) {
+.image-caption {
     min-width: 20%;
     max-width: 80%;
     min-height: 43px;
@@ -378,24 +444,26 @@ onMounted(() => {
     text-align: center;
 }
 
-/* pre code 样式 */
-::v-deep(code) {
-    font-size: 98%;
+/* code 样式 */
+.article-content code:not(pre code) {
+    padding: 2px 4px;
+    margin: 0 2px;
+    font-size: 95% !important;
+    border-radius: 4px;
+    color: rgb(41, 128, 185);
+    background-color: rgba(27, 31, 35, 0.05);
+    font-family: Operator Mono, Consolas, Monaco, Menlo, monospace;
 }
 
-::v-deep(pre) {
-    margin-bottom: 20px;
-}
-
-::v-deep(pre code.hljs) {
+/* pre 样式 */
+pre code.hljs {
     padding-top: 2rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-bottom: 0.7rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
     border-radius: 6px;
 }
 
-::v-deep(pre:before) {
+pre:before {
     background: #fc625d;
     border-radius: 50%;
     box-shadow: 20px 0 #fdbc40, 40px 0 #35cd4b;
@@ -406,44 +474,4 @@ onMounted(() => {
     position: absolute;
     width: 10px;
 }
-
-/* code 样式 */
-::v-deep(.article-content code:not(pre code)) {
-    padding: 2px 4px;
-    margin: 0 2px;
-    font-size: 95% !important;
-    border-radius: 4px;
-    color: rgb(41, 128, 185);
-    background-color: rgba(27, 31, 35, 0.05);
-    font-family: Operator Mono, Consolas, Monaco, Menlo, monospace;
-}
-
-/* 表格样式 */
-::v-deep(table) {
-    margin-bottom: 20px;
-    width: 100%;
-}
-
-::v-deep(table tr) {
-    background-color: #fff;
-    border-top: 1px solid #c6cbd1;
-}
-
-::v-deep(table th) {
-    padding: 6px 13px;
-    border: 1px solid #dfe2e5;
-}
-
-::v-deep(table td) {
-    padding: 6px 13px;
-    border: 1px solid #dfe2e5;
-}
-
-::v-deep(table tr:nth-child(2n)) {
-    background-color: #f6f8fa;
-}
-
-/* hr 横线 */
-::v-deep(hr) {
-    margin-bottom: 20px;
-}</style>
+</style>
