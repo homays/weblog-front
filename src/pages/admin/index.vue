@@ -22,7 +22,7 @@
                     </svg>
                     <div class="ml-5">
                         <h2 class="mb-1">文章</h2>
-                        <div class="font-bold text-2xl">{{ articleTotalCount }}</div>
+                        <CountTo :value="articleTotalCount"></CountTo>
                     </div>
                 </div>
             </div>
@@ -63,7 +63,7 @@
                     </svg>
                     <div class="ml-5">
                         <h2 class="mb-1">分类</h2>
-                        <div class="font-bold text-2xl">{{ categoryTotalCount }}</div>
+                        <CountTo :value="categoryTotalCount"></CountTo>
                     </div>
                 </div>
             </div>
@@ -99,7 +99,7 @@
                     </svg>
                     <div class="ml-5">
                         <h2 class="mb-1">标签</h2>
-                        <div class="font-bold text-2xl">{{ tagTotalCount }}</div>
+                        <CountTo :value="tagTotalCount"></CountTo>
                     </div>
                 </div>
             </div>
@@ -144,7 +144,7 @@
                 </svg>
                 <div class="ml-5">
                     <h2 class="mb-1">总浏览量</h2>
-                    <div class="font-bold text-2xl">{{ pvTotalCount }}</div>
+                    <CountTo :value="pvTotalCount"></CountTo>
                 </div>
             </div>
         </div>
@@ -187,6 +187,7 @@
 <script setup>
 import { ref } from 'vue'
 import { getBaseStatisticsInfo } from '@/api/admin/dashboard'
+import CountTo from '@/components/CountTo.vue'
 
 // 文章总数，默认值为 0
 const articleTotalCount = ref(0)
