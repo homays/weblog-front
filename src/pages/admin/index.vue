@@ -98,8 +98,8 @@
                             fill="#FFFFFF" p-id="27767"></path>
                     </svg>
                     <div class="ml-5">
-                        <h2 class="mb-1">标签</h2>
-                        <CountTo :value="tagTotalCount"></CountTo>
+                        <h2 class="mb-1">文章</h2>
+                        <CountTo :value="articleTotalCount" customClass="font-bold text-2xl"></CountTo>
                     </div>
                 </div>
             </div>
