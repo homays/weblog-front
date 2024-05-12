@@ -9,3 +9,6 @@ export function getArticlePageList(data) {
 export function getArticleDetail(articleId) {
     return axios.post("/article/detail", {articleId})
 }
+
+
+
