@@ -218,6 +218,9 @@
                             </div>
                         </nav>
                     </article>
+
+                    <!-- 评论组件 -->
+                    <Comment customeCss=""></Comment>
                 </div>
             </div>
             <!-- 右边栏 -->
@@ -235,7 +238,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, nextTick } from 'vue'
+import { ref, watch, onMounted, nextTick, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import WikiHeader from '@/layouts/frontend/components/WikiHeader.vue'
 import WikiFooter from '@/layouts/frontend/components/WikiFooter.vue'
@@ -249,6 +252,7 @@ import ScrollToTopButton from '@/layouts/frontend/components/ScrollToTopButton.v
 import {
     initAccordions,
 } from 'flowbite'
+import Comment from '@/components/Comment.vue'
 
 onMounted(() => {
     nextTick(() => initAccordions())
