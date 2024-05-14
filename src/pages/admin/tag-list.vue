@@ -40,6 +40,12 @@
                 <el-table-column prop="createTime" label="创建时间" width="180" />
                 <el-table-column label="操作">
                     <template #default="scope">
+                        <el-button type="primary" size="small" @click="editTagBtnClick(scope.row)">
+                            <el-icon class="mr-1">
+                                <Edit />
+                            </el-icon>
+                            编辑
+                        </el-button>
                         <el-button type="danger" size="small" @click="deleteTagSubmit(scope.row)">
                             <el-icon class="mr-1">
                                 <Delete />
@@ -69,11 +75,21 @@
                     </el-tag>
                     <span class="w-20">
                         <el-input v-if="inputVisible" ref="InputRef" v-model="inputValue" class="ml-1 w-20" size="small"
-                        @keyup.enter="handleInputConfirm" @blur="handleInputConfirm" />
-                    <el-button v-else class="button-new-tag ml-1" size="small" @click="showInput">
-                        + 新增标签
-                    </el-button>
+                            @keyup.enter="handleInputConfirm" @blur="handleInputConfirm" />
+                        <el-button v-else class="button-new-tag ml-1" size="small" @click="showInput">
+                            + 新增标签
+                        </el-button>
                     </span>
+                </el-form-item>
+            </el-form>
+        </FormDialog>
+
+        <!-- 编辑标签 -->
+        <FormDialog ref="editFormDialogRef" title="编辑标签" destroyOnClose @submit="editTagSubmit">
+            <el-form ref="editFormRef" :rules="rules" :model="editForm">
+                <el-form-item label="标签名称" prop="tagName" label-width="80px" size="large">
+                    <el-input v-model="editForm.tagName" placeholder="请输入标签名称" maxlength="20" show-word-limit
+                        clearable />
                 </el-form-item>
             </el-form>
         </FormDialog>
@@ -84,7 +100,7 @@
 <script setup>
 import { Search, RefreshRight } from '@element-plus/icons-vue'
 import { ref, reactive, nextTick } from 'vue'
-import { getTagPageList, addTag, deleteTag } from '@/api/admin/tag'
+import { getTagPageList, addTag, editTag, deleteTag } from '@/api/admin/tag'
 import moment from 'moment'
 import { showMessage, showModel } from '@/composables/util'
 import FormDialog from '@/components/FormDialog.vue'
@@ -136,6 +152,18 @@ const shortcuts = [
     },
 ]
 
+// 规则校验
+const rules = {
+  tagName: [
+    {
+      required: true,
+      message: '标签名称不能为空',
+      trigger: 'blur',
+    },
+    { min: 1, max: 10, message: '标签名称字数要求大于 1 个字符，小于 10 个字符', trigger: 'blur' },
+  ]
+}
+
 // 表格加载 Loading
 const tableLoading = ref(false)
 // 表格数据
@@ -185,21 +213,34 @@ const reset = () => {
 
 // 对话框是否显示
 const formDialogRef = ref(null)
+const editFormDialogRef = ref(null)
 
 // 新增分类按钮点击事件
 const addCategoryBtnClick = () => {
     formDialogRef.value.open()
 }
 
+// 编辑分类按钮点击事件
+const editTagBtnClick = (row) => {
+  editFormDialogRef.value.open()
+  editForm.tagId = row.id
+  editForm.tagName = row.name
+}
 
 // 表单引用
 const formRef = ref(null)
+const editFormRef = ref(null)
 
-// 添加文章分类表单对象
+// 添加文章标签表单对象
 const form = reactive({
     tags: []
 })
 
+// 编辑文章标签表单对象
+const editForm = reactive({
+  tagId: null,
+  tagName: ''
+})
 
 const onSubmit = () => {
     // 先验证 form 表单字段
@@ -227,9 +268,36 @@ const onSubmit = () => {
     })
 }
 
+// 编辑标签
+const editTagSubmit = () => {
+  // 先验证 form 表单字段
+  editFormRef.value.validate((valid) => {
+    if (!valid) {
+      console.log('表单验证不通过')
+      return false
+    }
+
+    // 显示提交按钮 loading
+    editFormDialogRef.value.showBtnLoading()
+    editTag(editForm).then((res) => {
+      if (res.success == true) {
+        showMessage('添加成功')
+        // 隐藏对话框
+        editFormDialogRef.value.close()
+        // 重新请求分页接口，渲染数据
+        getTableData()
+      } else {
+        // 获取服务端返回的错误消息
+        let message = res.message
+        // 提示错误消息
+        showMessage(message, 'error')
+      }
+    }).finally(() => editFormDialogRef.value.closeBtnLoading()) // 隐藏提交按钮 loading
+  })
+}
+
 // 删除标签
 const deleteTagSubmit = (row) => {
-    console.log(row)
     showModel('是否确定要删除该标签？').then(() => {
         deleteTag(row.id).then((res) => {
             if (res.success == true) {
@@ -258,22 +326,22 @@ const inputVisible = ref(false)
 const InputRef = ref('')
 
 const handleClose = (tag) => {
-  dynamicTags.value.splice(dynamicTags.value.indexOf(tag), 1)
+    dynamicTags.value.splice(dynamicTags.value.indexOf(tag), 1)
 }
 
 const showInput = () => {
-  inputVisible.value = true
-  nextTick(() => {
-    InputRef.value.input.focus()
-  })
+    inputVisible.value = true
+    nextTick(() => {
+        InputRef.value.input.focus()
+    })
 }
 
 const handleInputConfirm = () => {
-  if (inputValue.value) {
-    dynamicTags.value.push(inputValue.value)
-  }
-  inputVisible.value = false
-  inputValue.value = ''
+    if (inputValue.value) {
+        dynamicTags.value.push(inputValue.value)
+    }
+    inputVisible.value = false
+    inputValue.value = ''
 }
 
 </script>

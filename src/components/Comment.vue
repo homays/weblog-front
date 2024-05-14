@@ -349,7 +349,7 @@ bg-sky-600 rounded-lg focus:ring-4 focus:ring-sky-200 dark:focus:ring-sky-900 ho
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, nextTick, watc } from 'vue'
+import { ref, reactive, onMounted, nextTick, watch } from 'vue'
 import {
     initTooltips, initPopovers
 } from 'flowbite'
