@@ -238,7 +238,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, nextTick, reactive } from 'vue'
+import { ref, watch, onMounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import WikiHeader from '@/layouts/frontend/components/WikiHeader.vue'
 import WikiFooter from '@/layouts/frontend/components/WikiFooter.vue'
