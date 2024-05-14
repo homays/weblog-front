@@ -349,7 +349,7 @@ bg-sky-600 rounded-lg focus:ring-4 focus:ring-sky-200 dark:focus:ring-sky-900 ho
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, nextTick } from 'vue'
+import { ref, reactive, onMounted, nextTick, watc } from 'vue'
 import {
     initTooltips, initPopovers
 } from 'flowbite'
@@ -385,7 +385,7 @@ const commentForm = reactive({
     content: '',
     mail: '',
     nickname: '',
-    routerUrl: route.path,
+    routerUrl: route.query.articleId ? (route.path + '?articleId=' + route.query.articleId) : route.path,
     website: '',
     replyCommentId: null,
     parentCommentId: null
@@ -474,9 +474,19 @@ const comments = ref([])
 // 评论总数量
 const total = ref(0)
 
+// 监听路由
+watch(route, (newRoute, oldRoute) => {
+    // 设置评论表单中的路由路径
+    commentForm.routerUrl = route.query.articleId ? (route.path + '?articleId=' + route.query.articleId) : route.path
+    // 重新渲染评论数据
+    initComments()
+})
+
 function initComments() {
+    // 通过路由 query 中的 artilceId 是否为空，来判断是文章详情页，还是 wiki 详情页，从而设置不同的路由地址
+    let path = route.query.articleId ? (route.path + '?articleId=' + route.query.articleId) : route.path
     // 获取当前路由下的所有评论
-    getComments(route.path).then(res => {
+    getComments(path).then(res => {
         if (res.success) {
             total.value = res.data.total
             comments.value = res.data.comments
