@@ -5,7 +5,8 @@
             <!-- flex 布局，内容垂直居中 -->
             <div class="flex items-center">
                 <el-text>知识库标题</el-text>
-                <div class="ml-3 w-52 mr-5"><el-input v-model="searchWikiTitle" placeholder="请输入（模糊查询）" clearable /></div>
+                <div class="ml-3 w-52 mr-5"><el-input v-model="searchWikiTitle" placeholder="请输入（模糊查询）" clearable />
+                </div>
 
                 <el-text>创建日期</el-text>
                 <div class="ml-3 w-30 mr-5">
@@ -32,57 +33,49 @@
             <!-- 分页列表 -->
             <el-table :data="tableData" border stripe v-loading="tableLoading" table-layout="auto">
                 <el-table-column type="index" label="序号" width="60" />
-                <el-table-column prop="title" label="标题"  />
-                <el-table-column prop="cover" label="封面" >
+                <el-table-column prop="title" label="标题" />
+                <el-table-column prop="cover" label="封面">
                     <template #default="scope">
                         <el-image style="width: 100px;" :src="scope.row.cover" />
                     </template>
                 </el-table-column>
-                <el-table-column prop="isTop" label="是否置顶" >
+                <el-table-column prop="isTop" label="是否置顶">
                     <template #default="scope">
-                        <el-switch
-                            @change="handleIsTopChange(scope.row)"
-                            v-model="scope.row.isTop"
-                            inline-prompt
-                            :active-icon="Check"
-                            :inactive-icon="Close"
-                        />
+                        <el-switch @change="handleIsTopChange(scope.row)" v-model="scope.row.isTop" inline-prompt
+                            :active-icon="Check" :inactive-icon="Close" />
                     </template>
                 </el-table-column>
                 <el-table-column prop="createTime" label="发布时间" />
-                <el-table-column prop="isPublish" label="是否发布" >
+                <el-table-column prop="isPublish" label="是否发布">
                     <template #default="scope">
-                        <el-switch
-                            @change="handleIsPublishChange(scope.row)"
-                            v-model="scope.row.isPublish"
-                            inline-prompt
-                            :active-icon="Check"
-                            :inactive-icon="Close"
-                        />
+                        <el-switch @change="handleIsPublishChange(scope.row)" v-model="scope.row.isPublish"
+                            inline-prompt :active-icon="Check" :inactive-icon="Close" />
                     </template>
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="160">
                     <template #default="scope">
                         <el-tooltip class="box-item" effect="dark" content="编辑" placement="bottom">
-                            <el-button size="small" @click="showEditWikiDialog(scope.row)" :icon="Edit" circle >
+                            <el-button size="small" @click="showEditWikiDialog(scope.row)" :icon="Edit" circle>
                             </el-button>
                         </el-tooltip>
-                        
+
                         <el-tooltip class="box-item" effect="dark" content="编辑目录" placement="bottom">
-                            <el-button size="small" @click="showEditWikiCatalogDialog(scope.row)" :icon="Tickets" circle>
+                            <el-button size="small" @click="showEditWikiCatalogDialog(scope.row)" :icon="Tickets"
+                                circle>
                             </el-button>
                         </el-tooltip>
-                        
+
                         <el-tooltip class="box-item" effect="dark" content="预览" placement="bottom">
                             <el-button size="small" :icon="View" circle>
                             </el-button>
                         </el-tooltip>
-                            
+
                         <el-tooltip class="box-item" effect="dark" content="删除" placement="bottom">
-                            <el-button type="danger" size="small" @click="deleteWikiSubmit(scope.row)" :icon="Delete" circle>
+                            <el-button type="danger" size="small" @click="deleteWikiSubmit(scope.row)" :icon="Delete"
+                                circle>
                             </el-button>
                         </el-tooltip>
-                        
+
                     </template>
                 </el-table-column>
             </el-table>
@@ -96,56 +89,56 @@
 
         </el-card>
 
-            <!-- 新增知识库 -->
-            <FormDialog ref="formDialogRef" title="新增知识库" destroyOnClose @submit="onSubmit">
-                <el-form ref="formRef" :rules="rules" :model="form">
-                        <el-form-item label="标题" prop="title" label-width="80px" size="large">
-                            <el-input v-model="form.title" placeholder="请输入知识库标题" maxlength="20" show-word-limit clearable/>
-                        </el-form-item>
-                        <el-form-item label="封面" prop="cover" label-width="80px" size="large">
-                            <el-upload class="avatar-uploader" action="#" :on-change="handleCoverChange" :auto-upload="false"
+        <!-- 新增知识库 -->
+        <FormDialog ref="formDialogRef" title="新增知识库" destroyOnClose @submit="onSubmit">
+            <el-form ref="formRef" :rules="rules" :model="form">
+                <el-form-item label="标题" prop="title" label-width="80px" size="large">
+                    <el-input v-model="form.title" placeholder="请输入知识库标题" maxlength="20" show-word-limit clearable />
+                </el-form-item>
+                <el-form-item label="封面" prop="cover" label-width="80px" size="large">
+                    <el-upload class="avatar-uploader" action="#" :on-change="handleCoverChange" :auto-upload="false"
                         :show-file-list="false">
                         <img v-if="form.cover" :src="form.cover" class="avatar" />
                         <el-icon v-else class="avatar-uploader-icon">
                             <Plus />
                         </el-icon>
                     </el-upload>
-                        </el-form-item>
-                            <el-form-item label="摘要" prop="summary" label-width="80px" size="large">
-                                <!-- :rows="3" 指定 textarea 默认显示 3 行 -->
-                                <el-input v-model="form.summary" 
-                                :rows="3" 
-                                maxlength="30" show-word-limit type="textarea" placeholder="请输入知识库摘要" clearable />
-                            </el-form-item>
-                    </el-form>
-            </FormDialog>
+                </el-form-item>
+                <el-form-item label="摘要" prop="summary" label-width="80px" size="large">
+                    <!-- :rows="3" 指定 textarea 默认显示 3 行 -->
+                    <el-input v-model="form.summary" :rows="3" maxlength="30" show-word-limit type="textarea"
+                        placeholder="请输入知识库摘要" clearable />
+                </el-form-item>
+            </el-form>
+        </FormDialog>
 
-            <!-- 编辑知识库 -->
-            <FormDialog ref="editFormDialogRef" title="编辑知识库" destroyOnClose @submit="onEditWikiSubmit">
-                <el-form ref="editFormRef" :rules="rules" :model="editForm">
-                        <el-form-item label="标题" prop="title" label-width="80px" size="large">
-                            <el-input v-model="editForm.title" placeholder="请输入知识库标题" maxlength="20" show-word-limit clearable/>
-                        </el-form-item>
-                        <el-form-item label="封面" prop="cover" label-width="80px" size="large">
-                            <el-upload class="avatar-uploader" action="#" :on-change="handleUpdateCoverChange" :auto-upload="false"
-                        :show-file-list="false">
+        <!-- 编辑知识库 -->
+        <FormDialog ref="editFormDialogRef" title="编辑知识库" destroyOnClose @submit="onEditWikiSubmit">
+            <el-form ref="editFormRef" :rules="rules" :model="editForm">
+                <el-form-item label="标题" prop="title" label-width="80px" size="large">
+                    <el-input v-model="editForm.title" placeholder="请输入知识库标题" maxlength="20" show-word-limit
+                        clearable />
+                </el-form-item>
+                <el-form-item label="封面" prop="cover" label-width="80px" size="large">
+                    <el-upload class="avatar-uploader" action="#" :on-change="handleUpdateCoverChange"
+                        :auto-upload="false" :show-file-list="false">
                         <img v-if="editForm.cover" :src="editForm.cover" class="avatar" />
                         <el-icon v-else class="avatar-uploader-icon">
                             <Plus />
                         </el-icon>
                     </el-upload>
-                        </el-form-item>
-                            <el-form-item label="摘要" prop="summary" label-width="80px" size="large">
-                                <!-- :rows="3" 指定 textarea 默认显示 3 行 -->
-                                <el-input v-model="editForm.summary" 
-                                :rows="3" 
-                                maxlength="30" show-word-limit type="textarea" placeholder="请输入知识库摘要" clearable />
-                            </el-form-item>
-                    </el-form>
-            </FormDialog>
+                </el-form-item>
+                <el-form-item label="摘要" prop="summary" label-width="80px" size="large">
+                    <!-- :rows="3" 指定 textarea 默认显示 3 行 -->
+                    <el-input v-model="editForm.summary" :rows="3" maxlength="30" show-word-limit type="textarea"
+                        placeholder="请输入知识库摘要" clearable />
+                </el-form-item>
+            </el-form>
+        </FormDialog>
 
-            <!-- 目录编辑 -->
-            <WikiCatalogEditDialog ref="editCatalogFormDialogRef" title="编辑目录" width="70%" destroyOnClose></WikiCatalogEditDialog>
+        <!-- 目录编辑 -->
+        <WikiCatalogEditDialog ref="editCatalogFormDialogRef" title="编辑目录" width="70%" destroyOnClose>
+        </WikiCatalogEditDialog>
     </div>
 </template>
 
@@ -308,7 +301,7 @@ const onSubmit = () => {
             console.log('表单验证不通过')
             return false
         }
-        
+
         // 显示提交按钮 loading
         formDialogRef.value.showBtnLoading()
         addWiki(form).then((res) => {
@@ -336,7 +329,7 @@ const onSubmit = () => {
 
 // 更新置顶
 const handleIsTopChange = (row) => {
-    updateWikiIsTop({id: row.id, isTop: row.isTop}).then((res) => {
+    updateWikiIsTop({ id: row.id, isTop: row.isTop }).then((res) => {
         // 重新请求分页接口，渲染列表数据
         getTableData()
 
@@ -354,7 +347,7 @@ const handleIsTopChange = (row) => {
 
 // 更新发布状态
 const handleIsPublishChange = (row) => {
-    updateWikiIsPublish({id: row.id, isPublish: row.isPublish}).then((res) => {
+    updateWikiIsPublish({ id: row.id, isPublish: row.isPublish }).then((res) => {
         // 重新请求分页接口，渲染列表数据
         getTableData()
 
@@ -440,7 +433,7 @@ const onEditWikiSubmit = () => {
             console.log('表单验证不通过')
             return false
         }
-        
+
         // 显示提交按钮 loading
         editFormDialogRef.value.showBtnLoading()
         updateWiki(editForm).then((res) => {
@@ -464,7 +457,7 @@ const onEditWikiSubmit = () => {
             getTableData()
         }).finally(() => editFormDialogRef.value.closeBtnLoading()) // 隐藏提交按钮 loading
 
-})
+    })
 }
 
 // 编辑目录对话框是否显示

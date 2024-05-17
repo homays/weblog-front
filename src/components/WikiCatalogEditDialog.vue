@@ -1,6 +1,6 @@
 <template>
-    <el-dialog v-model="dialogVisible" :title="title" :width="width" :destroy-on-close="destroyOnClose" :draggable="true"
-        :close-on-click-modal="true" :close-on-press-escape="true">
+    <el-dialog v-model="dialogVisible" :title="title" :width="width" :destroy-on-close="destroyOnClose"
+        :draggable="true" :close-on-click-modal="true" :close-on-press-escape="true">
 
         <!-- 添加一级目录按钮 -->
         <div class="mb-5">
@@ -38,39 +38,45 @@
                         <el-dropdown @command="handleCommand">
                             <span class="el-dropdown-link">
                                 <svg t="1705472726484" class="icon w-5 h-5 outline-none" viewBox="0 0 1024 1024"
-                                    version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5968" width="200" height="200">
+                                    version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5968" width="200"
+                                    height="200">
                                     <path
                                         d="M512 298.6496a85.3504 85.3504 0 1 0 0-170.6496 85.3504 85.3504 0 0 0 0 170.6496z"
                                         fill="#707070" p-id="5969"></path>
                                     <path
                                         d="M512 512m-85.3504 0a85.3504 85.3504 0 1 0 170.7008 0 85.3504 85.3504 0 1 0-170.7008 0Z"
                                         fill="#707070" p-id="5970"></path>
-                                    <path d="M512 896a85.3504 85.3504 0 1 0 0-170.7008 85.3504 85.3504 0 0 0 0 170.7008z"
+                                    <path
+                                        d="M512 896a85.3504 85.3504 0 1 0 0-170.7008 85.3504 85.3504 0 0 0 0 170.7008z"
                                         fill="#707070" p-id="5971"></path>
                                 </svg>
                             </span>
                             <template #dropdown>
                                 <el-dropdown-menu>
-                                    <el-dropdown-item :command="{ id: catalog.id, sort: catalog.sort, action: 'rename' }">
+                                    <el-dropdown-item
+                                        :command="{ id: catalog.id, sort: catalog.sort, action: 'rename' }">
                                         <el-icon>
                                             <EditPen />
                                         </el-icon>
                                         重命名
                                     </el-dropdown-item>
-                                    <el-dropdown-item :command="{ id: catalog.id, sort: catalog.sort, action: 'addArticle' }">
+                                    <el-dropdown-item
+                                        :command="{ id: catalog.id, sort: catalog.sort, action: 'addArticle' }">
                                         <el-icon>
                                             <Plus />
                                         </el-icon>
                                         添加文章
                                     </el-dropdown-item>
-                                    <el-dropdown-item :command="{ id: catalog.id, sort: catalog.sort, action: 'moveUp' }"
-                                        divided v-if="(index + 1) > 1">
+                                    <el-dropdown-item
+                                        :command="{ id: catalog.id, sort: catalog.sort, action: 'moveUp' }" divided
+                                        v-if="(index + 1) > 1">
                                         <el-icon>
                                             <Top />
                                         </el-icon>
                                         上移
                                     </el-dropdown-item>
-                                    <el-dropdown-item :command="{ id: catalog.id, sort: catalog.sort, action: 'moveDown' }"
+                                    <el-dropdown-item
+                                        :command="{ id: catalog.id, sort: catalog.sort, action: 'moveDown' }"
                                         v-if="(index + 1) < catalogs.length">
                                         <el-icon>
                                             <Bottom />
@@ -107,7 +113,8 @@
                             </span>
                             <span class="grow"></span>
                             <!-- 重命名 -->
-                            <span class="hover:bg-gray-200 rounded py-2 px-2 ml-2 mr-2" @click="editTitle(childCatalog.id)">
+                            <span class="hover:bg-gray-200 rounded py-2 px-2 ml-2 mr-2"
+                                @click="editTitle(childCatalog.id)">
                                 <svg t="1705474417719" class="icon w-4 h-4" viewBox="0 0 1024 1024" version="1.1"
                                     xmlns="http://www.w3.org/2000/svg" p-id="8306" width="200" height="200">
                                     <path
@@ -142,10 +149,6 @@
                 </ul>
             </h2>
         </div>
-
-
-
-
     </el-dialog>
 
     <!-- 添加目录 -->
@@ -158,64 +161,63 @@
     </FormDialog>
 
     <!-- 添加文章到目录 -->
-    <FormDialog ref="addArticle2CatalogDialogRef" title="添加文章" width="80%" confirmText="添加" destroyOnClose @submit="onAddArticle2CatalogSubmit">
+    <FormDialog ref="addArticle2CatalogDialogRef" title="添加文章" width="80%" confirmText="添加" destroyOnClose
+        @submit="onAddArticle2CatalogSubmit">
         <div>
-        <!-- 表头分页查询条件， shadow="never" 指定 card 卡片组件没有阴影 -->
-        <el-card shadow="never" class="mb-5">
-            <!-- flex 布局，内容垂直居中 -->
-            <div class="flex items-center">
-                <el-text>文章标题</el-text>
-                <div class="ml-3 w-52 mr-5"><el-input v-model="searchArticleTitle" placeholder="请输入（模糊查询）" clearable/></div>
+            <!-- 表头分页查询条件， shadow="never" 指定 card 卡片组件没有阴影 -->
+            <el-card shadow="never" class="mb-5">
+                <!-- flex 布局，内容垂直居中 -->
+                <div class="flex items-center">
+                    <el-text>文章标题</el-text>
+                    <div class="ml-3 w-52 mr-5"><el-input v-model="searchArticleTitle" placeholder="请输入（模糊查询）"
+                            clearable />
+                    </div>
 
-                <el-text>创建日期</el-text>
-                <div class="ml-3 w-30 mr-5">
-                    <!-- 日期选择组件（区间选择） -->
-                    <el-date-picker v-model="pickDate" type="daterange" range-separator="至" start-placeholder="开始时间"
-                        end-placeholder="结束时间" size="default" :shortcuts="shortcuts" @change="datepickerChange" />
+                    <el-text>创建日期</el-text>
+                    <div class="ml-3 w-30 mr-5">
+                        <!-- 日期选择组件（区间选择） -->
+                        <el-date-picker v-model="pickDate" type="daterange" range-separator="至" start-placeholder="开始时间"
+                            end-placeholder="结束时间" size="default" :shortcuts="shortcuts" @change="datepickerChange" />
+                    </div>
+
+                    <el-button type="primary" class="ml-3" :icon="Search" @click="getTableData">查询</el-button>
+                    <el-button class="ml-3" :icon="RefreshRight" @click="reset">重置</el-button>
+                </div>
+            </el-card>
+
+            <el-card shadow="never">
+                <!-- 分页列表 -->
+                <el-table :data="tableData" border stripe v-loading="tableLoading"
+                    @selection-change="handleSelectionChange">
+                    <el-table-column type="selection" width="45" />
+                    <el-table-column prop="id" label="ID" width="50" />
+                    <el-table-column prop="title" label="标题" width="380" />
+                    <el-table-column prop="cover" label="封面" width="180">
+                        <template #default="scope">
+                            <el-image style="width: 100px;" :src="scope.row.cover" />
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column prop="isPublish" label="是否发布" width="100">
+                        <template #default="scope">
+                            <el-switch v-model="scope.row.isPublish" inline-prompt :active-icon="Check"
+                                :inactive-icon="Close" disabled />
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="createTime" label="发布时间" />
+                </el-table>
+
+                <!-- 分页 -->
+                <div class="mt-10 flex justify-center">
+                    <el-pagination v-model:current-page="current" v-model:page-size="size" :page-sizes="[10, 20, 50]"
+                        :small="false" :background="true" layout="total, sizes, prev, pager, next, jumper"
+                        :total="total" @size-change="handleSizeChange" @current-change="getTableData" />
                 </div>
 
-                <el-button type="primary" class="ml-3" :icon="Search" @click="getTableData">查询</el-button>
-                <el-button class="ml-3" :icon="RefreshRight" @click="reset">重置</el-button>
-            </div>
-        </el-card>
+            </el-card>
 
-        <el-card shadow="never">
-            <!-- 分页列表 -->
-            <el-table :data="tableData" border stripe v-loading="tableLoading" @selection-change="handleSelectionChange">
-                <el-table-column type="selection" width="45" />
-                <el-table-column prop="id" label="ID" width="50" />
-                <el-table-column prop="title" label="标题" width="380" />
-                <el-table-column prop="cover" label="封面" width="180">
-                    <template #default="scope">
-                        <el-image style="width: 100px;" :src="scope.row.cover" />
-                    </template>
-                </el-table-column>
-                
-                <el-table-column prop="isPublish" label="是否发布" width="100">
-                    <template #default="scope">
-                        <el-switch
-                            v-model="scope.row.isPublish"
-                            inline-prompt
-                            :active-icon="Check"
-                            :inactive-icon="Close"
-                            disabled 
-                        />
-                    </template>
-                </el-table-column>
-                <el-table-column prop="createTime" label="发布时间" />
-            </el-table>
 
-            <!-- 分页 -->
-            <div class="mt-10 flex justify-center">
-                <el-pagination v-model:current-page="current" v-model:page-size="size" :page-sizes="[10, 20, 50]"
-                    :small="false" :background="true" layout="total, sizes, prev, pager, next, jumper" :total="total"
-                    @size-change="handleSizeChange" @current-change="getTableData" />
-            </div>
-
-        </el-card>
-
-        
-    </div>
+        </div>
     </FormDialog>
 </template>
 
@@ -416,7 +418,7 @@ const onAddCatalogSubmit = () => {
 
         // 获取最后一个一级目录对象
         let lastCatalog = catalogs.value[catalogs.value.length - 1]
-        
+
         // 构造新的目录对象
         let newCatalog = {
             id: tmpId.value, // 新的目录由于没有 ID, 这里给个临时 ID, 负数表示, 标识是一个新添加的目录  
@@ -514,8 +516,10 @@ function getTableData() {
     // 显示表格 loading
     tableLoading.value = true
     // 调用后台分页接口，并传入所需参数
-    getArticlePageList({ current: current.value, size: size.value, startDate: startDate.value, endDate: endDate.value, 
-        title: searchArticleTitle.value, type: 1 })
+    getArticlePageList({
+        current: current.value, size: size.value, startDate: startDate.value, endDate: endDate.value,
+        title: searchArticleTitle.value, type: 1
+    })
         .then((res) => {
             if (res.success == true) {
                 tableData.value = res.data
@@ -593,7 +597,7 @@ function getCatalogs() {
 
 // 更新知识库目录数据
 function updateWikiCatalogsData() {
-    updateWikiCatalogs({id: currWikiId.value, catalogs: catalogs.value}).then(res => {
+    updateWikiCatalogs({ id: currWikiId.value, catalogs: catalogs.value }).then(res => {
         // 响参失败，提示错误消息
         if (res.success == false) {
             let message = res.message

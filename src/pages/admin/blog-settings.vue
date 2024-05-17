@@ -59,12 +59,12 @@
                 </el-form-item>
 
                 <!-- 开启知乎访问 -->
-                <el-form-item label="开启知乎访问">
+                <el-form-item label="开启力扣访问">
                     <el-switch v-model="isZhihuChecked" inline-prompt :active-icon="Check" :inactive-icon="Close"
                         @change="zhihuSwitchChange" />
                 </el-form-item>
-                <el-form-item label="知乎主页访问地址" v-if="isZhihuChecked">
-                    <el-input v-model="form.zhihuHomepage" clearable placeholder="请输入知乎主页访问的 URL" />
+                <el-form-item label="力扣主页访问地址" v-if="isZhihuChecked">
+                    <el-input v-model="form.zhihuHomepage" clearable placeholder="请输入力扣主页访问的 URL" />
                 </el-form-item>
 
                 <!-- 开启 CSDN 访问 -->
